@@ -1,3 +1,6 @@
+import {EventEmitter} from './EventEmitter';
+
+
 const __refs = new WeakMap();
 
 
@@ -107,7 +110,7 @@ class Actions extends Resolver {
 
 class Values extends Resolver {};
 
-class Context extends EventEmitter {
+export class Context extends EventEmitter {
 
 	constructor() {
 		super();

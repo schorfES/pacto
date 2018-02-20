@@ -1,7 +1,10 @@
+import {EventEmitter} from './EventEmitter';
+
+
 const __propsMap = new WeakMap();
 
 
-class Model extends EventEmitter {
+export class Model extends EventEmitter {
 
 	constructor(props = {}) {
 		super();

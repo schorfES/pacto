@@ -1,4 +1,4 @@
-class EventEmitter extends EventTarget {
+export class EventEmitter extends EventTarget {
 
 	on(type, callback) {
 		this.addEventListener(type, callback);

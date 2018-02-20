@@ -1,7 +1,10 @@
+import {EventEmitter} from './EventEmitter';
+
+
 const __modelsMap = new WeakMap();
 
 
-class Collection extends EventEmitter {
+export class Collection extends EventEmitter {
 
 	constructor(models = []) {
 		super();

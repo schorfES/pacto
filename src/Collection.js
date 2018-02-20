@@ -1,7 +1,7 @@
 import {EventEmitter} from './EventEmitter';
 
 
-const __modelsMap = new WeakMap();
+const __refs = new WeakMap();
 
 
 export class Collection extends EventEmitter {
@@ -57,7 +57,7 @@ export class Collection extends EventEmitter {
 			proxy = new Proxy(models.map(enshureIsModel), handler)
 		;
 
-		__modelsMap.set(this, proxy);
+		__refs.set(this, proxy);
 	}
 
 	get Model() {
@@ -65,7 +65,7 @@ export class Collection extends EventEmitter {
 	}
 
 	get models() {
-		return __modelsMap.get(this);
+		return __refs.get(this);
 	}
 
 }

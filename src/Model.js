@@ -1,7 +1,7 @@
 import {EventEmitter} from './EventEmitter';
 
 
-const __propsMap = new WeakMap();
+const __refs = new WeakMap();
 
 
 export class Model extends EventEmitter {
@@ -23,11 +23,11 @@ export class Model extends EventEmitter {
 			proxy = new Proxy(props, handler)
 		;
 
-		__propsMap.set(this, proxy);
+		__refs.set(this, proxy);
 	}
 
 	get props() {
-		return __propsMap.get(this);
+		return __refs.get(this);
 	}
 
 }

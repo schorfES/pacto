@@ -22,9 +22,27 @@
 			model.on('change', () => output.innerHTML = model.props.value);
 
 			var context = new Context();
-			context.actions.add('foo', function() {
-				console.log('Iam an action', this);
-			});
+
+			function action(event, context) {
+				console.log('Iam an action', event, context);
+			}
+
+			function otherAction(event, context) {
+				console.log('Iam an other action', event, context);
+			}
+
+			console.log('Add actions ------------');
+
+			context.actions
+				.add('foo', action)
+				.add('foo', otherAction);
+
+			context.trigger('foo', {bar: 'baz'});
+
+			console.log('Remove actions ------------');
+			context.actions
+				.remove('foo', action);
+
 			context.trigger('foo', {bar: 'baz'});
 		</script>
 	</body>

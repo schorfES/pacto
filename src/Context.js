@@ -1,61 +1,9 @@
-const
-	__actionsRefsMap = new WeakMap(),
-	__valuesMap = new WeakMap()
-;
+const __refs = new WeakMap();
 
 
-class Actions {
+class Resolver {
 
 	constructor(context) {
-		const
-			register = {},
-			onAction = (event) => {
-				const
-					{type} = event,
-					actions = register[type]
-				;
-
-				if (actions) {
-					actions.forEach((action) => action.call({context, event}));
-				}
-			},
-			refs = {
-				context,
-				register,
-				onAction
-			}
-		;
-
-		__actionsRefsMap.set(this, refs);
-	}
-
-	add(type, actions) {
-		if (!actions) {
-			throw new Error('Missing action(s) to add.');
-		}
-
-		const refs = __actionsRefsMap.get(this);
-
-		if (!refs.register[type]) {
-			refs.register[type] = [];
-			refs.context.on(type, refs.onAction);
-		}
-
-		refs.register[type] = refs.register[type].concat(actions);
-	}
-
-	remove(type, actions) {
-
-	}
-
-	has(type, action) {
-
-	}
-}
-
-class Values {
-
-	constructor() {
 		const
 			register = {},
 			refs = {
@@ -64,41 +12,117 @@ class Values {
 			}
 		;
 
-		__valuesMap.set(this, refs);
+		__refs.set(this, refs);
 	}
 
 	add(key, value) {
-
+		const {register} = __refs.get(this);
+		register[key] = value;
+		return this;
 	}
 
 	remove(key) {
-
-	}
-
-	has(key) {
-
+		const {register} = __refs.get(this);
+		register[key] = undefined;
+		delete(register[key]);
+		return this;
 	}
 
 	get(key) {
+		const {register} = __refs.get(this);
+		return register[key];
+	}
 
+	has(key) {
+		return !!this.get(key);
 	}
 
 }
+
+
+class Actions extends Resolver {
+
+	constructor(context) {
+		super(context);
+		const
+			refs = __refs.get(this),
+			{register} = refs
+		;
+
+		refs.onAction = (event) => {
+			const
+				{type} = event,
+				actions = register[type]
+			;
+
+			if (actions) {
+				actions.forEach((action) => action.call(null, event, context));
+			}
+		};
+	}
+
+	add(type, actions) {
+		const
+			refs = __refs.get(this),
+			{context, onAction} = refs,
+			registered = this.get(type)
+		;
+
+		if (!registered) {
+			context.on(type, onAction);
+		}
+
+		actions = (registered || []).concat(actions);
+		return super.add(type, actions);
+	}
+
+	remove(type, actions) {
+		const
+			refs = __refs.get(this),
+			{context, onAction} = refs,
+			registered = this.get(type)
+		;
+
+		if (registered && registered.length) {
+			if (!(actions instanceof Array)) {
+				actions = [actions];
+			}
+
+			actions.forEach((action) => {
+				const index = registered.indexOf(action);
+				if (index > -1) {
+					registered.splice(index, 1);
+				}
+			});
+
+			if (registered.length === 0) {
+				return super.remove(type);
+			}
+		}
+
+		return this;
+	}
+
+}
+
+class Values extends Resolver {};
 
 class Context extends EventEmitter {
 
 	constructor() {
 		super();
-		this.__actions = new Actions(this);
-		this.__values = new Values();
+		__refs.set(this, {
+			actions: new Actions(this),
+			values: new Values(this)
+		});
 	}
 
 	get actions() {
-		return this.__actions;
+		return __refs.get(this).actions;
 	}
 
 	get values() {
-		return this.__values;
+		return __refs.get(this).values;
 	}
 
 }

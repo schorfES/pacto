@@ -1,0 +1,17 @@
+{
+  "name": "lilMC",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^22.4.0",
+    "live-server": "^1.2.0"
+  }
+}

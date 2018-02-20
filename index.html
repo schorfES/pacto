@@ -22,7 +22,9 @@
 			model.on('change', () => output.innerHTML = model.props.value);
 
 			var context = new Context();
-			context.actions.add('foo', (event, context) => console.log('Ima action', event, context));
+			context.actions.add('foo', function() {
+				console.log('Iam an action', this);
+			});
 			context.trigger('foo', {bar: 'baz'});
 		</script>
 	</body>

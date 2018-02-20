@@ -1,9 +1,32 @@
+const
+	__actionsRefsMap = new WeakMap(),
+	__valuesMap = new WeakMap()
+;
+
+
 class Actions {
 
 	constructor(context) {
-		this.__context = context;
-		this.__actions = {};
-		this.__onExecute = this.__onExecute.bind(this);
+		const
+			register = {},
+			onAction = (event) => {
+				const
+					{type} = event,
+					actions = register[type]
+				;
+
+				if (actions) {
+					actions.forEach((action) => action.call({context, event}));
+				}
+			},
+			refs = {
+				context,
+				register,
+				onAction
+			}
+		;
+
+		__actionsRefsMap.set(this, refs);
 	}
 
 	add(type, actions) {
@@ -11,12 +34,14 @@ class Actions {
 			throw new Error('Missing action(s) to add.');
 		}
 
-		if (!this.__actions[type]) {
-			this.__actions[type] = [];
-			this.__context.on(type, this.__onExecute);
+		const refs = __actionsRefsMap.get(this);
+
+		if (!refs.register[type]) {
+			refs.register[type] = [];
+			refs.context.on(type, refs.onAction);
 		}
 
-		this.__actions[type] = this.__actions[type].concat(actions);
+		refs.register[type] = refs.register[type].concat(actions);
 	}
 
 	remove(type, actions) {
@@ -26,25 +51,20 @@ class Actions {
 	has(type, action) {
 
 	}
-
-	__onExecute(event) {
-		const
-			{type} = event,
-			actions = this.__actions[type]
-		;
-
-		if (actions) {
-			actions.forEach((action) =>
-				action(event, this.__context));
-		}
-	}
-
 }
 
 class Values {
 
 	constructor() {
-		this.__values = {};
+		const
+			register = {},
+			refs = {
+				context,
+				register
+			}
+		;
+
+		__valuesMap.set(this, refs);
 	}
 
 	add(key, value) {

@@ -108,7 +108,6 @@ class Actions extends Resolver {
 
 }
 
-class Values extends Resolver {};
 
 export class Context extends EventEmitter {
 
@@ -116,7 +115,7 @@ export class Context extends EventEmitter {
 		super();
 		__refs.set(this, {
 			actions: new Actions(this),
-			values: new Values(this)
+			values: new Resolver(this)
 		});
 	}
 

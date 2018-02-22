@@ -1,4 +1,5 @@
 import {EventEmitter} from './EventEmitter';
+import {Model} from './Model';
 
 
 const __refs = new WeakMap();

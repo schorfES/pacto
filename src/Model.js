@@ -18,6 +18,8 @@ export class Model extends EventEmitter {
 					if (isChanged) {
 						this.trigger('change', {prop: property, value: value});
 					}
+
+					return true;
 				}
 			},
 			proxy = new Proxy(props, handler)

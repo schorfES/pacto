@@ -1,17 +1,42 @@
-export class EventEmitter extends EventTarget {
+const __refs = new WeakMap();
+
+
+export class EventEmitter {
+
+	constructor() {
+		__refs.set(this, {});
+	}
 
 	on(type, callback) {
-		this.addEventListener(type, callback);
+		const refs = __refs.get(this);
+		refs[type] = refs[type] || [];
+		refs[type].push(callback);
+
 		return this;
 	}
 
 	off(type, callback) {
-		this.removeEventListener(type, callback);
+		const refs = __refs.get(this);
+
+		if (refs[type]) {
+			if (callback) {
+				refs[type] = refs[type].filter(cb => cb !== callback);
+			} else {
+				refs[type] = [];
+			}
+		}
+
 		return this;
 	}
 
-	trigger(type, detail = null) {
-		this.dispatchEvent(new CustomEvent(type, {detail}));
+	trigger(type, data = null) {
+		const refs = __refs.get(this);
+		refs[type] && refs[type].forEach((callback) => callback.call(null, {
+			sender: this,
+			type,
+			data
+		}));
+
 		return this;
 	}
 

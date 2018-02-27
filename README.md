@@ -7,6 +7,21 @@
 ```javascript
 import {Context} from 'lilMC';
 
+
+// Setup actions:
+class SomeAction {
+	run() {
+		console.log('Run some action');
+	}
+}
+
+class SomeOtherAction {
+	run() {
+		console.log('Run some other action');
+	}
+}
+
+// Setup context:
 const context = new Context();
 
 // Handle actions
@@ -28,6 +43,7 @@ context.trigger('some:event');
 ```javascript
 import {Model} from 'lilMC';
 
+
 const model = new Model({
 	foo: 1,
 	bar: 'baz'
@@ -44,6 +60,7 @@ model.props = 2;
 ### Collection
 ```javascript
 import {Collection} from 'lilMC';
+
 
 const collection = new Collection([
 	{foo: 'foo'},

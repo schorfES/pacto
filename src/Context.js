@@ -59,7 +59,12 @@ class Actions extends Resolver {
 			;
 
 			if (actions) {
-				actions.forEach((action) => action.call(null, event, context));
+				actions.forEach((Action) => {
+					var action = new Action();
+					action.context = context;
+					action.event = event;
+					action.run();
+				});
 			}
 		};
 	}

@@ -24,21 +24,21 @@ context.values
 context.trigger('some:event');
 ```
 
-### Collection
+### Model
 ```javascript
-import {Collection} from 'lilMC';
+import {Model} from 'lilMC';
 
-const collection = new Collection({
+const model = new Model({
 	foo: 1,
 	bar: 'baz'
 });
 
-collection.on('change', (event) => {
-	console.log('Collection changed: ', event.sender.models); // logs: 2
+model.on('change', (event) => {
+	console.log('Model changed: ', event.sender.props); // logs: 2
 });
-console.log(collection.models); // logs: 1
+console.log(model.props); // logs: 1
 
-collection.models = 2;
+model.props = 2;
 ```
 
 ### Collection

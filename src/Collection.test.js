@@ -5,7 +5,7 @@ import {EventEmitter} from './EventEmitter';
 describe('The collection', () => {
 
 	test('inherits EventEmitter', () => {
-		expect(new Collection() instanceof EventEmitter).toBeTruthy();
+		expect(new Collection()).toBeInstanceOf(EventEmitter);
 	});
 
 });

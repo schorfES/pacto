@@ -1,5 +1,10 @@
 # lil'MC
 
+## Possible names
+
+* aliud => different
+* ???
+
 ## Examples
 
 ### Context

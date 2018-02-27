@@ -4,14 +4,16 @@
   "main": "src/index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {},
   "devDependencies": {
-    "jest": "^22.4.0",
-    "live-server": "^1.2.0"
+    "babel": "^6.23.0",
+    "babel-jest": "^22.4.1",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.4.2"
   }
 }

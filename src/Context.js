@@ -85,11 +85,7 @@ class Actions extends Resolver {
 	}
 
 	remove(type, actions) {
-		const
-			refs = __refs.get(this),
-			{context, onAction} = refs,
-			registered = this.get(type)
-		;
+		const registered = this.get(type);
 
 		if (registered && registered.length) {
 			if (!(actions instanceof Array)) {

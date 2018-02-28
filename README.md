@@ -7,7 +7,7 @@ A small framework which allows the developer to choose the view component...
 ### Context
 
 ```javascript
-import {Context} from 'lilMC';
+import {Context} from 'pacto';
 
 
 // Setup actions:
@@ -43,7 +43,7 @@ context.trigger('some:event');
 
 ### Model
 ```javascript
-import {Model} from 'lilMC';
+import {Model} from 'pacto';
 
 
 const model = new Model({
@@ -61,7 +61,7 @@ model.props = 2;
 
 ### Collection
 ```javascript
-import {Collection} from 'lilMC';
+import {Collection} from 'pacto';
 
 
 const collection = new Collection([

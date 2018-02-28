@@ -1,19 +1,22 @@
 {
-  "name": "lilMC",
-  "version": "1.0.0",
+  "name": "pacto",
+  "version": "0.0.1",
   "main": "src/index.js",
   "private": true,
   "scripts": {
+    "validate": "eslint . --ext .js",
     "test": "jest --coverage"
   },
   "author": "",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "A small framework which allows the developer to choose the view component...",
   "dependencies": {},
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-jest": "^22.4.1",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.1",
+    "eslint-plugin-jest": "^21.12.2",
     "jest": "^22.4.2"
   }
 }

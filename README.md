@@ -2,11 +2,6 @@
 
 A small framework which allows the developer to choose the view component...
 
-## Possible names
-
-* aliud => different
-* ???
-
 ## Examples
 
 ### Context

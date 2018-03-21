@@ -9,6 +9,7 @@ export class EventEmitter {
 
 	on(type, callback) {
 		const refs = __refs.get(this);
+
 		refs[type] = refs[type] || [];
 		refs[type].push(callback);
 
@@ -18,12 +19,14 @@ export class EventEmitter {
 	off(type, callback) {
 		const refs = __refs.get(this);
 
-		if (refs[type]) {
-			if (callback) {
-				refs[type] = refs[type].filter(cb => cb !== callback);
-			} else {
-				refs[type] = [];
-			}
+		if (!refs[type]) {
+			return this;
+		}
+
+		if (callback) {
+			refs[type] = refs[type].filter(cb => cb !== callback);
+		} else {
+			refs[type] = [];
 		}
 
 		return this;
@@ -31,6 +34,7 @@ export class EventEmitter {
 
 	trigger(type, data = null) {
 		const refs = __refs.get(this);
+
 		refs[type] && refs[type].forEach((callback) => callback.call(null, {
 			sender: this,
 			type,

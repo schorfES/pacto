@@ -4,7 +4,7 @@ import {EventEmitter} from './EventEmitter';
 const __refs = new WeakMap();
 
 
-class Resolver {
+class __Resolver {
 
 	constructor(context) {
 		const
@@ -43,7 +43,7 @@ class Resolver {
 }
 
 
-class Actions extends Resolver {
+class __Actions extends __Resolver {
 
 	constructor(context) {
 		super(context);
@@ -88,6 +88,10 @@ class Actions extends Resolver {
 		const registered = this.get(type);
 
 		if (registered && registered.length) {
+			if (!actions) {
+				return super.remove(type);
+			}
+
 			if (!(actions instanceof Array)) {
 				actions = [actions];
 			}
@@ -115,8 +119,8 @@ export class Context extends EventEmitter {
 	constructor() {
 		super();
 		__refs.set(this, {
-			actions: new Actions(this),
-			values: new Resolver(this)
+			actions: new __Actions(this),
+			values: new __Resolver(this)
 		});
 	}
 

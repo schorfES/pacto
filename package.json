@@ -4,9 +4,13 @@
   "main": "src/index.js",
   "scripts": {
     "validate": "eslint . --ext .js",
-    "test": "jest --coverage"
+    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schorfES/pacto.git"
+  },
+  "author": "Norman Rusch",
   "license": "MIT",
   "description": "A small framework which allows the developer to choose the view component...",
   "dependencies": {},
@@ -14,6 +18,7 @@
     "babel": "^6.23.0",
     "babel-jest": "^22.4.1",
     "babel-preset-env": "^1.6.1",
+    "coveralls": "^3.0.0",
     "eslint": "^4.18.1",
     "eslint-plugin-jest": "^21.12.2",
     "jest": "^22.4.2",

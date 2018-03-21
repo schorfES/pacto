@@ -4,8 +4,18 @@ import {EventEmitter} from './EventEmitter';
 
 describe('The model', () => {
 
+	let model;
+
+	beforeEach(() => {
+		model = new Model();
+	});
+
+	afterEach(() => {
+		model = null;
+	});
+
 	test('inherits EventEmitter', () => {
-		expect(new Model()).toBeInstanceOf(EventEmitter);
+		expect(model).toBeInstanceOf(EventEmitter);
 	});
 
 });

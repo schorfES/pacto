@@ -4,8 +4,18 @@ import {EventEmitter} from './EventEmitter';
 
 describe('The collection', () => {
 
+	let collection;
+
+	beforeEach(() => {
+		collection = new Collection();
+	});
+
+	afterEach(() => {
+		collection = null;
+	});
+
 	test('inherits EventEmitter', () => {
-		expect(new Collection()).toBeInstanceOf(EventEmitter);
+		expect(collection).toBeInstanceOf(EventEmitter);
 	});
 
 });

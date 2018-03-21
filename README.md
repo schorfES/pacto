@@ -1,5 +1,8 @@
 # Pacto
 
+[![Build Status](https://travis-ci.org/schorfES/pacto.svg?branch=master)](https://travis-ci.org/schorfES/pacto)
+[![Coverage Status](https://coveralls.io/repos/github/schorfES/pacto/badge.svg?branch=master)](https://coveralls.io/github/schorfES/pacto?branch=master)
+
 A small framework which allows the developer to choose the view component...
 
 ## Examples

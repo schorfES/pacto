@@ -26,13 +26,17 @@ export class Collection extends EventEmitter {
 
 							switch (property) {
 								case 'pop':
-								case 'shift':
 								case 'reverse':
+								case 'shift':
 								case 'sort':
 									isChanged = true;
 									break;
 
 								case 'fill':
+									isChanged = true;
+									args[0] = enshureIsModel(args[0]);
+									break;
+
 								case 'push':
 								case 'unshift':
 									isChanged = true;

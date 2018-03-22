@@ -9,5 +9,11 @@ module.exports ={
 		path: path.resolve(__dirname, 'dist'),
 		library: 'pacto',
 		libraryTarget: 'umd'
+	},
+	module: {
+		rules: [{
+			test: /\.js$/,
+			use: [{loader: 'babel-loader'}]
+		}]
 	}
 };

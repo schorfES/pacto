@@ -4,3 +4,8 @@ node_js:
 - 9
 install:
 - npm install
+script:
+- npm run test
+- npm run validate
+after_success:
+- npm run coverage

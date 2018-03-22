@@ -17,6 +17,7 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-jest": "^22.4.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
     "eslint": "^4.18.1",

@@ -8,11 +8,12 @@ export class Model extends EventEmitter {
 
 	constructor(props = {}) {
 		super();
+		props = {...this.defaults, ...props};
 
 		const
 			handler = {
 				set: (target, property, value) => {
-					let isChanged = target[property] !== value;
+					const isChanged = target[property] !== value;
 					target[property] = value;
 
 					if (isChanged) {
@@ -26,6 +27,10 @@ export class Model extends EventEmitter {
 		;
 
 		__refs.set(this, proxy);
+	}
+
+	get defaults() {
+		return null;
 	}
 
 	get props() {

@@ -5,7 +5,7 @@
   "scripts": {
     "validate": "eslint . --ext .js",
     "test": "jest --coverage --verbose",
-    "coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
     "readme": "doctoc ./README.md"
   },
   "repository": {

@@ -1,5 +1,6 @@
 {
   "name": "pacto",
+  "description": "A small MC* framework for non SPA websites.",
   "version": "0.0.1",
   "main": "src/index.js",
   "scripts": {
@@ -14,7 +15,6 @@
   },
   "author": "Norman Rusch",
   "license": "MIT",
-  "description": "A small framework which allows the developer to choose the view component...",
   "dependencies": {},
   "devDependencies": {
     "babel": "^6.23.0",

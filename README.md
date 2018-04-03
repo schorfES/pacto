@@ -11,6 +11,8 @@ A lightweight framework for non SPA websites.
 
 - [Why?](#why)
 - [The Concepts](#the-concepts)
+- [Installation](#installation)
+- [Requirements](#requirements)
 - [Documentation](#documentation)
   - [Context](#context)
     - [Actions](#actions)
@@ -56,6 +58,10 @@ The state management in Pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.
 Instances of them or any other object can be stored and accessed through the
 context like a simple key/value store.
+
+## Installation
+
+## Requirements
 
 ## Documentation
 

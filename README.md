@@ -42,19 +42,19 @@ and
 
 ## The Concepts
 
-In contrast to other libraries, Pacto follows the traditional approach of a MVC
+In contrast to other libraries, pacto follows the traditional approach of a MVC
 framework, but only ships features for state management (Model) and application
 logic (Control). It keeps the decision open for a developer which library to
 choose for the view component.
 
-The core of Pacto is a context instance. This is based on a typical event bus
+The core of pacto is a context instance. This is based on a typical event bus
 where events can be added, removed and triggered (pubsub pattern). The context
 instance also allows to add actions to certain events. An action is
 designed to hold a part of the application logic. Each time a relevant event
 occurs, an added action will run to execute a logic like update a state, fetch
 or recalculate data.
 
-The state management in Pacto is not solved using a giant monolithic state
+The state management in pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.
 Instances of them or any other object can be stored and accessed through the
 context like a simple key/value store.

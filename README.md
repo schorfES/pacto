@@ -150,19 +150,22 @@ context.dispatch('event:type', {foo: 'bar'}); // logs 'I am an action', {context
 
 Adds one or more actions to a specific event type.
 
-|name     |type                      |description          |
-|---------|--------------------------|---------------------|
-|`type`   |`String`                  |The name of the event|
-|`actions`|`Action,[Array of Action]`|A single action class or an array of actions which should be bound to the event|
+|name     |type               |description          |
+|---------|-------------------|---------------------|
+|`type`   |`String`           |The name of the event|
+|`actions`|`Action`           |A single action class which should be bound to an event|
+|`actions`|`[Array of Action]`|An array of action classed which should be bound to an event|
 
 ##### context.actions.remove(type, actions)
 
 Removes all, one or more registered actions from a specific event type.
 
-|name     |type                                |description          |
-|---------|------------------------------------|---------------------|
-|`type`   |`String`                            |The name of the event|
-|`actions`|`undefined,Action,[Array of Action]`|A single action class or an array of actions which should be bound to the event|
+|name     |type               |description          |
+|---------|-------------------|---------------------|
+|`type`   |`String`           |The name of the event|
+|`actions`|`undefined`        |When passing no value, all registered actions are removed|
+|`actions`|`Action`           |All actions of this type are removed|
+|`actions`|`[Array of Action]`|All actions of those types are removed|
 
 ##### context.actions.get(type)
 

@@ -91,7 +91,7 @@ required polyfills before loading and running the app:
 		script.src = src;
 		document.body.appendChild(script);
 	});
-})('/path/to/app-with-pacto.js');
+})('/path/to/app-using-pacto.js');
 ```
 
 ## Documentation

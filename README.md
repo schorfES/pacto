@@ -36,9 +36,9 @@ _virtual DOM_ of that framework. This may results in a higher _time to
 interactive_ due to network traffic, parsing, parse, interpret and execution time.
 
 Pacto tries to reduce those problems by shipping small features which are using
-latest browser features like [proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
+latest browser features like [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
 and
-[weakmap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakmap).
+[WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakmap).
 
 ## The Concepts
 
@@ -61,7 +61,38 @@ context like a simple key/value store.
 
 ## Installation
 
+Pacto is available on [NPM](https://www.npmjs.com/package/pacto):
+
+```bash
+npm install pacto --save
+```
+
 ## Requirements
+
+Pacto is _dependency free_, but it requires latest browser features.
+So you may need to add a polyfill for [WeakMap](https://www.npmjs.com/package/weakmap-polyfill).
+When using pacto's [Collection](#collection) or [Model](#model) you may also
+need a polyfill for [Proxy](https://www.npmjs.com/package/proxy-polyfill).
+
+Using webpack's dynamic import feature, this boilerplate can be used to load all
+required polyfills before loading and running the app:
+
+```javascript
+(function(src){
+	Promise.all([
+		(!!window.Proxy || import(/* webpackChunkName: "proxy-polyfill" */ 'proxy-polyfill')),
+		(!!window.WeakMap || import(/* webpackChunkName: "weakmap-polyfill" */ 'weakmap-polyfill'))
+	]).then(() => {
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.charset = 'utf-8';
+		script.async = true;
+		script.defer = true;
+		script.src = src;
+		document.body.appendChild(script);
+	});
+})('/path/to/app-with-pacto.js');
+```
 
 ## Documentation
 

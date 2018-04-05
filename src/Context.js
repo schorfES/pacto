@@ -97,9 +97,10 @@ class __Actions extends __Resolver {
 			}
 
 			actions.forEach((action) => {
-				const index = registered.indexOf(action);
-				if (index > -1) {
+				let index = registered.indexOf(action);
+				while (index > -1) {
 					registered.splice(index, 1);
+					index = registered.indexOf(action);
 				}
 			});
 

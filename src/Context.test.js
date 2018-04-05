@@ -101,9 +101,16 @@ describe('The context "actions" resolver', () => {
 		expect(context.actions.get(type)).toEqual([ActionB]);
 	});
 
+	test('.remove() removes all equal actions by type', () => {
+		const type = 'test:event';
+		context.actions.add(type, [ActionA, ActionA, ActionB, ActionA]).remove(type, ActionA);
+
+		expect(context.actions.get(type)).toEqual([ActionB]);
+	});
+
 	test('.remove() removes multiple actions by type', () => {
 		const type = 'test:event';
-		context.actions.add(type, [ActionA, ActionB]).remove(type, [ActionA, ActionB]);
+		context.actions.add(type, [ActionA, ActionB, ActionA]).remove(type, [ActionA, ActionB]);
 
 		expect(context.actions.get(type)).toEqual(undefined);
 	});

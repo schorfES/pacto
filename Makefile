@@ -1,3 +1,21 @@
+validate:
+	eslint \
+		. \
+		--ext .js
+
+
+tests:
+	jest \
+		--coverage \
+		--verbose
+
+
+coverage:
+	cat \
+		./coverage/lcov.info \
+	| node_modules/.bin/coveralls
+
+
 build: build_esm build_umd build_min
 
 
@@ -38,3 +56,7 @@ build_min:
 		--compress \
 		--mangle \
 		--output dist/pacto.min.js
+
+make docs:
+	node_modules/.bin/doctoc \
+		./README.md

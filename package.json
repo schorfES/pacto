@@ -5,10 +5,10 @@
   "main": "dist/pacto.umd.js",
   "module": "dist/pacto.esm.js",
   "scripts": {
-    "validate": "eslint . --ext .js",
-    "test": "jest --coverage --verbose",
-    "coverage": "cat ./coverage/lcov.info | coveralls",
-    "readme": "doctoc ./README.md",
+    "validate": "make validate",
+    "test": "make tests",
+    "coverage": "make coverage",
+    "docs": "make docs",
     "build": "make build"
   },
   "repository": {

@@ -2,7 +2,7 @@
   "name": "pacto",
   "description": "A small MC* framework for non SPA websites.",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "dist/pacto.min.js",
   "scripts": {
     "validate": "eslint . --ext .js",
     "test": "jest --coverage --verbose",

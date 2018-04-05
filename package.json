@@ -2,12 +2,14 @@
   "name": "pacto",
   "description": "A small MC* framework for non SPA websites.",
   "version": "0.0.1",
-  "main": "dist/pacto.min.js",
+  "main": "dist/pacto.umd.js",
+  "module": "dist/pacto.esm.js",
   "scripts": {
     "validate": "eslint . --ext .js",
     "test": "jest --coverage --verbose",
     "coverage": "cat ./coverage/lcov.info | coveralls",
-    "readme": "doctoc ./README.md"
+    "readme": "doctoc ./README.md",
+    "build": "make build"
   },
   "repository": {
     "type": "git",
@@ -17,9 +19,9 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^22.4.1",
-    "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
@@ -28,7 +30,7 @@
     "eslint-plugin-jest": "^21.12.2",
     "jest": "^22.4.2",
     "live-server": "^1.2.0",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "rollup": "^0.57.1",
+    "uglify-js": "^3.3.18"
   }
 }

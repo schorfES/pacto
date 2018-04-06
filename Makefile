@@ -43,6 +43,7 @@ build_umd:
 		--name 'pacto' \
 		--file dist/pacto.umd.js
 
+	# @TODO: enable "modules = false" in preset env to bundle umd correctly
 	node_modules/.bin/babel \
 		dist/pacto.umd.js \
 		--out-file dist/pacto.umd.js
@@ -55,6 +56,7 @@ build_min:
 		--name 'pacto' \
 		--file dist/pacto.min.js
 
+	# @TODO: enable "modules = false" in preset env to bundle umd correctly
 	node_modules/.bin/babel \
 		dist/pacto.min.js \
 		--out-file dist/pacto.min.js

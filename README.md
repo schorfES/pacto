@@ -83,14 +83,14 @@ So you may need to add a polyfill for [WeakMap](https://www.npmjs.com/package/we
 When using pacto's [Collection](#collection) or [Model](#model) you may also
 need a polyfill for [Proxy](https://www.npmjs.com/package/proxy-polyfill).
 
-Using webpack's dynamic import feature, this boilerplate can be used to load all
-required polyfills before loading and running the app:
+Using dynamic imports, this boilerplate can be used to load all required
+polyfills before loading and running the app:
 
 ```javascript
 (function(src){
 	Promise.all([
-		(!!window.Proxy || import(/* webpackChunkName: "proxy-polyfill" */ 'proxy-polyfill')),
-		(!!window.WeakMap || import(/* webpackChunkName: "weakmap-polyfill" */ 'weakmap-polyfill'))
+		(!!window.Proxy || import('proxy-polyfill')),
+		(!!window.WeakMap || import('weakmap-polyfill'))
 	]).then(() => {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';

@@ -136,12 +136,28 @@ class Action {
 
 const context = new Context();
 context.action.add('event:type', Action);
-context.dispatch('event:type', {foo: 'bar'}); // logs 'I am an action', {context}, {event}
+context.dispatch('event:type', {foo: 'bar'}); // logs: 'I am an action', {context}, {event}
 ```
 
 Read more about the [actions api](./docs/Context.md#actions).
 
 #### Values
+
+The `.values` property of a context instance is a key/value storage. Each
+type of value can be stored using a unique key.
+
+```javascript
+import {Context} from 'pacto';
+
+const context = new Context();
+context.values.add('key:name', {foo: 'bar'});
+console.log(context.values.has('key:name')); // logs: true
+console.log(context.values.get('key:name')); // logs: {foo: 'bar'}
+
+context.values.remove('key:name');
+console.log(context.values.has('key:name')); // logs: false
+console.log(context.values.get('key:name')); // logs: undefined
+```
 
 Read more about the [values api](./docs/Context.md#values).
 

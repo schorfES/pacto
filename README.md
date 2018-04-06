@@ -43,7 +43,7 @@ already server side rendered DOM or to enhance certain sections with some
 _interaction candy_. On the other hand the network payload to ship a SPA
 framework is quiet huge when using for example only the _state management_ or
 _virtual DOM_ of that framework. This may results in a higher _time to
-interactive_ due to network traffic, parsing, parse, interpret and execution time.
+interactive_ due to network traffic, parse, interpret and execution time.
 
 Pacto tries to reduce those problems by shipping small features which are using
 latest browser features like [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
@@ -131,7 +131,7 @@ dispatched through the context, an instance of the action class will be created
 and executed. The instance of each action has access to the context and
 the passed event data which triggered the execution of that action.
 
-An action can is handled using on the `.actions` property of the context instance.
+Action management is done by the `.actions` property of the context instance.
 
 ```javascript
 import {Context} from 'pacto';
@@ -147,78 +147,11 @@ context.action.add('event:type', Action);
 context.dispatch('event:type', {foo: 'bar'}); // logs 'I am an action', {context}, {event}
 ```
 
-##### context.actions.add(type, actions)
-
-Adds one or more actions to a specific event type.
-
-|name     |type               |description          |
-|---------|-------------------|---------------------|
-|`type`   |`String`           |The name of the event|
-|`actions`|`Action`           |A single action class which should be bound to an event|
-|`actions`|`[Array of Action]`|An array of action classed which should be bound to an event|
-
-##### context.actions.remove(type, actions)
-
-Removes all, one or more registered actions from a specific event type.
-
-|name     |type               |description          |
-|---------|-------------------|---------------------|
-|`type`   |`String`           |The name of the event|
-|`actions`|`undefined`        |When passing no value, all registered actions are removed|
-|`actions`|`Action`           |All actions of this type are removed|
-|`actions`|`[Array of Action]`|All actions of those types are removed|
-
-##### context.actions.get(type)
-
-Returns all registered actions from a specific event type.
-
-|name     |type    |description          |
-|---------|--------|---------------------|
-|`type`   |`String`|The name of the event|
-
-##### context.actions.has(type)
-
-Returns `true` if at least one registered action is bound to a specific event
-type, otherwise `false`.
-
-|name     |type    |description          |
-|---------|--------|---------------------|
-|`type`   |`String`|The name of the event|
+Read more about the [actions api](./docs/Context.md#actions).
 
 #### Values
 
-##### context.values.add(key, value)
-
-Stores a given value using a key.
-
-|name   |type    |description                             |
-|-------|--------|----------------------------------------|
-|`type` |`String`|The key which is used to store the value|
-|`value`|`*`     |The value to store                      |
-
-##### context.values.remove(key)
-
-Removes an existing value by a given key.
-
-|name   |type    |description       |
-|-------|--------|------------------|
-|`type` |`String`|The key of a value|
-
-##### context.values.get(key)
-
-Returns an existing value by a given key.
-
-|name   |type    |description       |
-|-------|--------|------------------|
-|`type` |`String`|The key of a value|
-
-##### context.values.has(key)
-
-Returns `true` if the given key has a stored value, otherwise `false`.
-
-|name   |type    |description       |
-|-------|--------|------------------|
-|`type` |`String`|The key of a value|
+Read more about the [values api](./docs/Context.md#values).
 
 ### Collection
 

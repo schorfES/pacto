@@ -21,7 +21,6 @@ A lightweight framework for non SPA websites.
   - [Model](#model)
   - [Collection](#collection)
   - [EventEmitter](#eventemitter)
-- [Contribution](#contribution)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -222,8 +221,6 @@ collection.models.push({baz: 'bar'});
 ```
 
 ### EventEmitter
-
-## Contribution
 
 ## License
 

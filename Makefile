@@ -14,6 +14,7 @@ validate:
 
 tests:
 	jest \
+		src \
 		--coverage \
 		--verbose
 
@@ -27,6 +28,9 @@ coverage:
 
 
 build: build_esm build_umd build_min
+	jest \
+		tests \
+		--verbose
 
 
 build_esm:

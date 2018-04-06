@@ -1,0 +1,22 @@
+import * as pactoESM from '../dist/pacto.esm';
+import * as pactoUMD from '../dist/pacto.umd';
+import * as pactoMIN from '../dist/pacto.min';
+
+
+const PACTO_CLASS_NAMES = ['Collection', 'Context', 'EventEmitter', 'Model'];
+
+describe('The dist builds', () => {
+
+	test('ems build exposes all pacto classes', () => {
+		expect(Object.keys(pactoESM)).toEqual(PACTO_CLASS_NAMES);
+	});
+
+	test('umd build exposes all pacto classes', () => {
+		expect(Object.keys(pactoUMD)).toEqual(PACTO_CLASS_NAMES);
+	});
+
+	test('min build exposes all pacto classes', () => {
+		expect(Object.keys(pactoMIN)).toEqual(PACTO_CLASS_NAMES);
+	});
+
+});

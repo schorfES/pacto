@@ -1,3 +1,11 @@
+.PHONY:  docs validate tests coverage build build_sem build_umd build_min
+
+
+docs:
+	node_modules/.bin/doctoc \
+		./README.md
+
+
 validate:
 	eslint \
 		. \
@@ -13,7 +21,7 @@ tests:
 coverage:
 	cat \
 		./coverage/lcov.info \
-	| node_modules/.bin/coveralls
+		| node_modules/.bin/coveralls
 
 
 build: build_esm build_umd build_min
@@ -56,7 +64,3 @@ build_min:
 		--compress \
 		--mangle \
 		--output dist/pacto.min.js
-
-make docs:
-	node_modules/.bin/doctoc \
-		./README.md

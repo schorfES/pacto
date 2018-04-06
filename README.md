@@ -18,8 +18,8 @@ A lightweight framework for non SPA websites.
   - [Context](#context)
     - [Actions](#actions)
     - [Values](#values)
-  - [Collection](#collection)
   - [Model](#model)
+  - [Collection](#collection)
   - [EventEmitter](#eventemitter)
 - [Contribution](#contribution)
 - [License](#license)
@@ -161,9 +161,65 @@ console.log(context.values.get('key:name')); // logs: undefined
 
 Read more about the [values api](./docs/Context.md#values).
 
+### Model
+
+A model is an observed object. It detects changes to it's properties and
+dispatches a `'change'` event. All properties of a model instance are accessible
+through the `.props` property.
+
+```javascript
+import {Model} from 'pacto';
+
+const data = {foo: 'bar'};
+const model = new Model(data);
+
+model.on('change', () => console.log(model.props)); // logs: {foo: 'baz'}
+model.props.foo = 'baz';
+```
+
+A model can be created using defaults for it's properties. If one or more of
+these properties are not passed into the model, the model will use the
+predefined default values until the value will be set.
+
+```javascript
+import {Model} from 'pacto';
+
+class MyModel extends Model {
+	get defaults() {
+		return {foo: 'foo', baz: 'baz'};
+	}
+}
+
+const data = {foo: 'bar'};
+const model = new MyModel(data);
+console.log(model.props); // logs: {foo: 'bar', baz: 'baz'}
+```
+
 ### Collection
 
-### Model
+A collection is an observed array of [Models](#model). This models are accessible through the `.models` property. This property offers all [array functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). When on of these functions changes the array, the collection instance dispatches a `'change'` event.
+
+All items which are passed into the collection will be transformed into a [Model](#model). Which type of Model should be used is defined in the `.Model` getter of a Collection instance.
+
+```javascript
+import {Collection, Model} from 'pacto';
+
+class MyModel extends Model {
+	get defaults() {
+		return {foo: 'foo', baz: 'baz'};
+	}
+}
+
+class MyCollection extends Collection {
+	get Model() {
+		return MyModel;
+	}
+}
+
+const collection = new MyCollection([{foo: 'bar'}]);
+collection.on('change', () => console.log(collection.models)); // logs: [{foo: 'bar', baz: 'baz'}, {foo: 'foo', baz: 'bar'}]
+collection.models.push({baz: 'bar'});
+```
 
 ### EventEmitter
 

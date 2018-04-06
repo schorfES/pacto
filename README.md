@@ -222,6 +222,13 @@ collection.models.push({baz: 'bar'});
 
 ### EventEmitter
 
+All objects that emit events are instances of the EventEmitter class. These
+objects expose an `.on()` function that allows one or more functions to be
+attached to named events emitted by the object. To remove those attached
+functions the `.off()` function can be used. When a specific event is dispatched
+on an EventEmitter instance, all attached functions by that event are called
+synchronously.
+
 ## License
 
 [LICENSE (MIT)](./LICENSE)

@@ -3,7 +3,15 @@ import * as pactoUMD from '../dist/pacto.umd';
 import * as pactoMIN from '../dist/pacto.min';
 
 
-const PACTO_CLASS_NAMES = ['Collection', 'Context', 'EventEmitter', 'Model'];
+const PACTO_CLASS_NAMES = [
+	'Collection',
+	'Context',
+	'EventEmitter',
+	'Initialize',
+	'InitializeLazy',
+	'Model',
+	'View'
+];
 
 describe('The dist builds', () => {
 

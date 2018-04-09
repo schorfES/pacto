@@ -17,9 +17,12 @@ A lightweight framework for non SPA websites.
 - [Documentation](#documentation)
   - [Context](#context)
     - [Actions](#actions)
+      - [Initialize](#initialize)
+      - [InitializeLazy](#initializelazy)
     - [Values](#values)
   - [Model](#model)
   - [Collection](#collection)
+  - [View](#view)
   - [EventEmitter](#eventemitter)
 - [License](#license)
 
@@ -44,16 +47,19 @@ and
 ## The Concepts
 
 In contrast to other libraries, pacto follows the traditional approach of a MVC
-framework, but only ships features for state management (Model) and application
-logic (Control). It keeps the decision open for a developer which library to
-choose for the view component.
-
-The core of pacto is a context instance. This is based on a typical event bus
-where events can be added, removed and triggered (pubsub pattern). The context
-instance also allows to add actions to certain events. An action is
+framework. The core of pacto is a context instance. This is based on a typical
+event bus where events can be added, removed and triggered (pubsub pattern). The
+context instance also allows to add actions to certain events. An action is
 designed to hold a part of the application logic. Each time a relevant event
 occurs, an added action will run to execute a logic like update a state, fetch
 or recalculate data.
+
+These actions allow to create modules. Each module should contain at least one
+initialize action, but can be composed of multiple actions, models, collections,
+services view etc. This initialize action is meant to be the entry point of each
+module. It setups and executes its module:
+
+@TODO: Insert diagram of module structure
 
 The state management in pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.
@@ -140,6 +146,14 @@ context.dispatch('event:type', {foo: 'bar'}); // logs: 'I am an action', {contex
 
 Read more about the [actions api](./docs/Context.md#actions).
 
+##### Initialize
+
+@TODO: Add documentation
+
+##### InitializeLazy
+
+@TODO: Add documentation
+
 #### Values
 
 The `.values` property of a context instance is a key/value storage. Each
@@ -219,6 +233,10 @@ const collection = new MyCollection([{foo: 'bar'}]);
 collection.on('change', () => console.log(collection.models)); // logs: [{foo: 'bar', baz: 'baz'}, {foo: 'foo', baz: 'bar'}]
 collection.models.push({baz: 'bar'});
 ```
+
+### View
+
+@TODO: Add documentation
 
 ### EventEmitter
 

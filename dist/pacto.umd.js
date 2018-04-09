@@ -8,6 +8,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -378,10 +380,280 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return Context;
 	}(EventEmitter);
 
+	function __isBoolean(value) {
+		return typeof value === 'boolean';
+	}
+
+	var Initialize = function () {
+		function Initialize() {
+			_classCallCheck(this, Initialize);
+		}
+
+		_createClass(Initialize, [{
+			key: 'run',
+			value: function run() {
+				var _this6 = this;
+
+				this.beforeAll();
+
+				var context = this.context,
+				    event = this.event,
+				    settings = this.settings,
+				    data = event.data,
+				    viewoptions = settings.viewoptions,
+				    views = context.values.get(settings.namespace) || [],
+				    root = data && data.root ? root : document.body;
+
+
+				if (!settings.viewclass) {
+					throw new Error('Define a view class');
+				}
+
+				if (!settings.selector) {
+					throw new Error('Define a selector');
+				}
+
+				if (!settings.namespace) {
+					throw new Error('Define a namespace');
+				}
+
+				[].concat(_toConsumableArray(root.querySelectorAll(settings.selector))).forEach(function (el, index) {
+					var options = _extends({ el: el, context: context }, viewoptions);
+					var result = null,
+					    view = null;
+
+					result = _this6.beforeEach(options, el, index);
+					if (!__isBoolean(result)) {
+						throw new Error('The return value of beforeEach() must be a boolean.');
+					} else if (!result) {
+						return;
+					}
+
+					view = new settings.viewclass(options).render();
+
+					result = _this6.afterEach(view, el, index);
+					if (!__isBoolean(result)) {
+						throw new Error('The return value of afterEach() must be a boolean.');
+					} else if (!result) {
+						return;
+					}
+
+					views.push(view);
+				});
+
+				if (views.length) {
+					context.values.add(settings.namespace, views);
+				}
+
+				this.afterAll();
+			}
+		}, {
+			key: 'beforeAll',
+			value: function beforeAll() {
+				// Overwrite this...
+			}
+		}, {
+			key: 'beforeEach',
+			value: function beforeEach() /* options, element, index */{
+				// Overwrite this...
+				return true;
+			}
+		}, {
+			key: 'afterAll',
+			value: function afterAll() {
+				// Overwrite this...
+			}
+		}, {
+			key: 'afterEach',
+			value: function afterEach() /* view, element, index */{
+				// Overwrite this...
+				return true;
+			}
+		}, {
+			key: 'settings',
+			get: function get() {
+				return {};
+			}
+		}]);
+
+		return Initialize;
+	}();
+
+	var InitializeLazy = function () {
+		function InitializeLazy() {
+			_classCallCheck(this, InitializeLazy);
+
+			this._onIntersect = this._onIntersect.bind(this);
+			this._fetched = false;
+		}
+
+		_createClass(InitializeLazy, [{
+			key: 'run',
+			value: function run() {
+				var settings = this.settings;
+
+
+				if (!settings.selector) {
+					throw new Error('Define a selector');
+				}
+
+				this._lookup(settings.selector);
+			}
+		}, {
+			key: '_lookup',
+			value: function _lookup(selector) {
+				var event = this.event,
+				    data = event.data,
+				    root = data && data.root ? root : document.body,
+				    elements = root.querySelectorAll(selector);
+
+
+				if (elements.length) {
+					if (window.IntersectionObserver) {
+						this._observe(elements);
+					} else {
+						this._fetch();
+					}
+				}
+			}
+		}, {
+			key: '_observe',
+			value: function _observe(elements) {
+				var _this7 = this;
+
+				this._observers = [].concat(_toConsumableArray(elements)).map(function (element) {
+					var observer = new window.IntersectionObserver(_this7._onIntersect, _this7.observerSettings);
+
+					observer.observe(element);
+					return observer;
+				});
+			}
+		}, {
+			key: '_release',
+			value: function _release() {
+				if (this._observers && this._observers.length) {
+					this._observers.forEach(function (observer) {
+						return observer.disconnect();
+					});
+					this._observers = null;
+				}
+			}
+		}, {
+			key: '_fetch',
+			value: function _fetch() {
+				var _this8 = this;
+
+				var event = this.event;
+
+
+				if (this._fetched) {
+					return;
+				}
+
+				this._fetched = true;
+				this.import.then(function (module) {
+					var Initialize = module.Action || module.default;
+
+					if (!Initialize) {
+						throw new Error('Module must return Action or default');
+					}
+
+					if (!(typeof Initialize.prototype.run === 'function')) {
+						throw new Error('Module must be an Action');
+					}
+
+					// Replace the proxy action with the loaded action
+					_this8.context.actions.add(event.type, Initialize).remove(event.type, _this8.constructor);
+
+					// Execute the current action:
+					_this8._execute(Initialize);
+				});
+			}
+		}, {
+			key: '_execute',
+			value: function _execute(Initialize) {
+				var action = new Initialize();
+				action.context = this.context;
+				action.event = this.event;
+				action.run();
+			}
+		}, {
+			key: '_onIntersect',
+			value: function _onIntersect(entries) {
+				var isVisible = false;
+				entries.forEach(function (entry) {
+					return isVisible = entry.intersectionRatio > 0 || isVisible;
+				});
+
+				if (isVisible) {
+					this._release();
+					this._fetch();
+				}
+			}
+		}, {
+			key: 'settings',
+			get: function get() {
+				return {};
+			}
+		}, {
+			key: 'import',
+			get: function get() {
+				return null;
+			}
+		}, {
+			key: 'observerSettings',
+			get: function get() {
+				return {
+					rootMargin: '0px',
+					threshold: [0.0001, 0.9999]
+				};
+			}
+		}]);
+
+		return InitializeLazy;
+	}();
+
+	var View = function (_EventEmitter4) {
+		_inherits(View, _EventEmitter4);
+
+		function View() {
+			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			_classCallCheck(this, View);
+
+			var _this9 = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this));
+
+			_this9.options = options;
+			_this9.context = options.context;
+			_this9.el = options.el;
+			return _this9;
+		}
+
+		_createClass(View, [{
+			key: 'render',
+			value: function render() {
+				return this;
+			}
+		}, {
+			key: 'destroy',
+			value: function destroy() {
+				this.options = null;
+				this.context = null;
+				this.el = null;
+				return this;
+			}
+		}]);
+
+		return View;
+	}(EventEmitter);
+
 	exports.Collection = Collection;
 	exports.Context = Context;
 	exports.EventEmitter = EventEmitter;
+	exports.Initialize = Initialize;
+	exports.InitializeLazy = InitializeLazy;
 	exports.Model = Model;
+	exports.View = View;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 });

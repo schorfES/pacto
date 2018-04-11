@@ -106,7 +106,7 @@ polyfills before loading and running the app:
 ### Context
 
 An instance of pacto's Context has typical known properties of an
-[EventEmitter](#eventemitter) like `.on()`, `.off()` and `.dispatch()`. It also
+[EventEmitter](#eventemitter) like `.on()`, `.off()` and `.trigger()`. It also
 allows to handle [Actions](#actions) and store/receive [Values](#values) in each
 instance.
 
@@ -116,7 +116,7 @@ import {Context} from 'pacto';
 const context = new Context();
 context
 	.on('event:type', (event) => console.log('The event occurred.', event))
-	.dispatch('event:type', {foo: 'bar'})
+	.trigger('event:type', {foo: 'bar'})
 	.off('event:type');
 ```
 
@@ -141,7 +141,7 @@ class Action {
 
 const context = new Context();
 context.action.add('event:type', Action);
-context.dispatch('event:type', {foo: 'bar'}); // logs: 'I am an action', {context}, {event}
+context.trigger('event:type', {foo: 'bar'}); // logs: 'I am an action', {context}, {event}
 ```
 
 Read more about the [actions API](./docs/Context.md#actions).

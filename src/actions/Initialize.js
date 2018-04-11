@@ -28,7 +28,7 @@ function __getSettings(instance) {
 export class Initialize {
 
 	get settings() {
-		return {};
+		return null;
 	}
 
 	run() {

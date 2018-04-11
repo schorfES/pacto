@@ -9,8 +9,8 @@ function __getSettings(instance) {
 		throw new Error('Define settings object');
 	}
 
-	if (!settings.viewclass) {
-		throw new Error('Define a view class');
+	if (!settings.view) {
+		throw new Error('Define a view');
 	}
 
 	if (!settings.selector) {
@@ -43,7 +43,7 @@ export class Initialize {
 		;
 
 		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {
-			const options = {el, context, ...settings.viewoptions};
+			const options = {el, context, ...settings.params};
 			let
 				result = null,
 				view = null
@@ -54,7 +54,7 @@ export class Initialize {
 				return;
 			}
 
-			view = new settings.viewclass(options).render();
+			view = new settings.view(options).render();
 
 			result = this.afterEach(view, el, index);
 			if (__isFalse(result)) {

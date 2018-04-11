@@ -77,7 +77,6 @@ export class Initialize {
 
 	beforeEach(/* options, element, index */) {
 		// Overwrite this...
-		return true;
 	}
 
 	afterAll() {
@@ -86,7 +85,6 @@ export class Initialize {
 
 	afterEach(/* view, element, index */) {
 		// Overwrite this...
-		return true;
 	}
 
 }

@@ -33,9 +33,9 @@ A lightweight framework for non SPA websites.
 There are a [lot of great frameworks](https://javascriptreport.com/the-ultimate-guide-to-javascript-frameworks/)
 out there which are supposed to be used for _single page applications (SPA)_.
 When using them on regular websites it's hard to apply those frameworks to an
-already server side rendered DOM or to enhance certain sections with some
-_interaction candy_. On the other hand the network payload to ship a SPA
-framework is quiet huge when using for example only the _state management_ or
+already server-side rendered DOM or to enhance certain sections with some
+_interaction candy_. On the other hand, the network payload to ship an SPA
+framework is quite huge when using for example only the _state management_ or
 _virtual DOM_ of that framework. This may results in a higher _time to
 interactive_ due to network traffic, parse, interpret and execution time.
 
@@ -46,20 +46,20 @@ and
 
 ## The Concepts
 
-In contrast to other libraries, pacto follows the traditional approach of a MVC
+In contrast to other libraries, pacto follows the traditional approach of an MVC
 framework. The core of pacto is a context instance. This is based on a typical
 event bus where events can be added, removed and triggered (pubsub pattern). The
-context instance also allows to add actions to certain events. An action is
+context instance also allows adding actions to certain events. An action is
 designed to hold a part of the application logic. Each time a relevant event
-occurs, an added action will run to execute a logic like update a state, fetch
-or recalculate data.
+occurs, an added action will run to execute a logic like to update a state, to
+fetch or to recalculate data.
 
-These actions allow to create modules. Each module should contain at least one
-initialize action, but can be composed of multiple actions, models, collections,
+These actions allow creating modules. Each module should contain at least one
+initialize action but can be composed of multiple actions, models, collections,
 services view etc. This initialize action is meant to be the entry point of each
 module. It setups and executes its module:
 
-@TODO: Insert diagram of module structure
+@TODO: Insert diagram of the module structure
 
 The state management in pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.
@@ -122,7 +122,7 @@ context
 
 #### Actions
 
-An Action is a class which can bound on a specific event. Each action class
+An Action is a class which can bound to a specific event. Each action class
 needs to contain at least a `.run()` method. When an action relevant event is
 dispatched through the context, an instance of the action class will be created
 and executed. The instance of each action has access to the context and
@@ -144,7 +144,7 @@ context.action.add('event:type', Action);
 context.dispatch('event:type', {foo: 'bar'}); // logs: 'I am an action', {context}, {event}
 ```
 
-Read more about the [actions api](./docs/Context.md#actions).
+Read more about the [actions API](./docs/Context.md#actions).
 
 ##### Initialize
 
@@ -172,11 +172,11 @@ console.log(context.values.has('key:name')); // logs: false
 console.log(context.values.get('key:name')); // logs: undefined
 ```
 
-Read more about the [values api](./docs/Context.md#values).
+Read more about the [values API](./docs/Context.md#values).
 
 ### Model
 
-A model is an observed object. It detects changes to it's properties and
+A model is an observed object. It detects changes to its properties and
 dispatches a `'change'` event. All properties of a model instance are accessible
 through the `.props` property.
 
@@ -190,7 +190,7 @@ model.on('change', () => console.log(model.props)); // logs: {foo: 'baz'}
 model.props.foo = 'baz';
 ```
 
-A model can be created using defaults for it's properties. If one or more of
+A model can be created using defaults for its properties. If one or more of
 these properties are not passed into the model, the model will use the
 predefined default values until the value will be set.
 
@@ -210,9 +210,15 @@ console.log(model.props); // logs: {foo: 'bar', baz: 'baz'}
 
 ### Collection
 
-A collection is an observed array of [Models](#model). This models are accessible through the `.models` property. This property offers all [array functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). When on of these functions changes the array, the collection instance dispatches a `'change'` event.
+A collection is an observed array of [Models](#model). These models are
+accessible through the `.models` property. This property offers all
+[array functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+When one of these functions changes the array, the collection instance
+dispatches a `'change'` event.
 
-All items which are passed into the collection will be transformed into a [Model](#model). Which type of Model should be used is defined in the `.Model` getter of a Collection instance.
+All items which are passed into the collection will be transformed into a
+[Model](#model). Which type of Model should be used is defined in the `.Model`
+getter of a Collection instance.
 
 ```javascript
 import {Collection, Model} from 'pacto';

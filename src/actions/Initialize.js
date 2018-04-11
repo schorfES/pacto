@@ -1,5 +1,5 @@
-function __isBoolean(value) {
-	return typeof value === 'boolean';
+function __isFalse(value) {
+	return typeof value === 'boolean' && !value;
 }
 
 
@@ -40,14 +40,14 @@ export class Initialize {
 			;
 
 			result = this.beforeEach(options, el, index);
-			if (__isBoolean(result) && !result) {
+			if (__isFalse(result)) {
 				return;
 			}
 
 			view = new settings.viewclass(options).render();
 
 			result = this.afterEach(view, el, index);
-			if (__isBoolean(result) && !result) {
+			if (__isFalse(result)) {
 				return;
 			}
 

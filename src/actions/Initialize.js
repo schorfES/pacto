@@ -32,8 +32,6 @@ export class Initialize {
 	}
 
 	run() {
-		this.beforeAll();
-
 		const
 			settings = __getSettings(this),
 			{context, event} = this,
@@ -42,12 +40,16 @@ export class Initialize {
 			root = data && data.root ? data.root : document.body
 		;
 
+		let result;
+
+		result = this.beforeAll();
+		if (__isFalse(result)) {
+			return;
+		}
+
 		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {
 			const options = {el, context, ...settings.params};
-			let
-				result = null,
-				view = null
-			;
+			let view = null;
 
 			result = this.beforeEach(options, el, index);
 			if (__isFalse(result)) {

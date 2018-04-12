@@ -48,6 +48,10 @@ export class Initialize {
 		}
 
 		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {
+			if (views.some((view) => view.el == el)) {
+				return;
+			}
+
 			const options = {el, context, ...settings.params};
 			let view = null;
 

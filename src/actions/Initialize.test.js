@@ -85,7 +85,7 @@ describe('The initialize action', () => {
 		execute();
 		expect(context.values.has('module')).toBeTruthy();
 		expect(context.values.get('module')).toHaveLength(2);
-		expect(context.values.get('module')[0] instanceof View).toBeTruthy();
+		expect(context.values.get('module')[0]).toBeInstanceOf(View);
 	});
 
 	test('should create views with correct DOM elements', () => {

@@ -1,6 +1,6 @@
 import {Context} from '../Context';
-import {View} from '../View';
 import {Initialize} from './Initialize';
+import {View} from '../View';
 
 
 describe('The initialize action', () => {

@@ -14,5 +14,8 @@
   },
   "plugins": [
     "jest"
-  ]
+  ],
+  "rules": {
+    "sort-imports": 2
+  }
 }

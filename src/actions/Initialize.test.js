@@ -19,15 +19,16 @@ describe('The initialize action', () => {
 	function setup(settings = SETTINGS) {
 
 		class Action extends Initialize {
-
 			get settings() {
 				return settings;
 			}
-
 		}
 
-		context.actions.add(EVENT_NAME, Action);
+		wire(Action);
+	}
 
+	function wire(Action) {
+		context.actions.add(EVENT_NAME, Action);
 	}
 
 	function execute(data = null) {
@@ -79,52 +80,283 @@ describe('The initialize action', () => {
 		expect(execute).toThrow(new Error('Define a view'));
 	});
 
-	test.skip('should create views in namespace', () => {
-		// @TODO: Implement test case
+	test('should create views in namespace', () => {
+		setup({selector: '.module', namespace: 'module', view: View});
+		execute();
+		expect(context.values.has('module')).toBeTruthy();
+		expect(context.values.get('module')).toHaveLength(2);
+		expect(context.values.get('module')[0] instanceof View).toBeTruthy();
 	});
 
-	test.skip('should create views with correct DOM elements', () => {
-		// @TODO: Implement test case
+	test('should create views with correct DOM elements', () => {
+		const elements = document.querySelectorAll('.module');
+		setup({selector: '.module', namespace: 'module', view: View});
+		execute();
+		expect(context.values.get('module')[0].el).toBe(elements[0]);
+		expect(context.values.get('module')[1].el).toBe(elements[1]);
 	});
 
-	test.skip('should not create views twice when calling twice', () => {
-		// @TODO: Implement test case
+	test('should not create views twice when calling twice', () => {
+		setup({selector: '.module', namespace: 'module', view: View});
+		execute();
+
+		const views = context.values.get('module');
+		execute();
+		expect(context.values.get('module')).toBe(views);
+		expect(context.values.get('module')).toHaveLength(2);
 	});
 
-	test.skip('should create empty namespace when there are no DOM elements', () => {
-		// @TODO: Implement test case
+	test('should not create empty namespace when there are no DOM elements', () => {
+		setup({selector: '.component', namespace: 'component', view: View});
+		execute();
+		expect(context.values.has('component')).not.toBeTruthy();
 	});
 
-	test.skip('should create views by given root-element in eventData', () => {
-		// @TODO: Implement test case
+	test('should create views by given root-element in event data', () => {
+		const
+			root = document.querySelectorAll('.wrapper')[0],
+			elements = document.querySelectorAll('.wrapper .module')
+		;
+
+		setup({selector: '.module', namespace: 'module', view: View});
+		execute({root});
+		expect(context.values.get('module')).toHaveLength(1);
+		expect(context.values.get('module')[0].el).toBe(elements[0]);
 	});
 
-	test.skip('should pass params into view instances', () => {
-		// @TODO: Implement test case
+	test('should pass params into view instances', () => {
+		const
+			elements = document.querySelectorAll('.module'),
+			selector = '.module',
+			namespace = 'module',
+			view = View,
+			params = {numbers: [1, 2, 3, 42], data: {foo: 'bar'}}
+		;
+
+		setup({selector, namespace, view, params});
+		execute();
+
+		expect(context.values.get('module')[0].options)
+			.toEqual({el: elements[0], context, ...params});
 	});
 
-	test.skip('should call beforeEach() on instance for each view', () => {
-		// @TODO: Implement test case
+	test('should call beforeAll() when runs', () => {
+		let callCount = 0;
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			beforeAll() {
+				callCount++;
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(callCount).toBe(1);
 	});
 
-	test.skip('should not render views when beforeEach() returns "false"', () => {
-		// @TODO: Implement test case
+	test('should stop run() when beforeAll() when returns "false"', () => {
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			beforeAll() {
+				return false;
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(context.values.has('module')).not.toBeTruthy();
 	});
 
-	test.skip('should call afterEach() on instance for each view', () => {
-		// @TODO: Implement test case
+	test('should call afterAll() when runs', () => {
+		let callCount = 0;
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			afterAll() {
+				callCount++;
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(callCount).toBe(1);
 	});
 
-	test.skip('should render views but not add them to namespace when afterEach() returns "false"', () => {
-		// @TODO: Implement test case
+	test('should pass all views into afterAll() when runs', () => {
+		let views = null;
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			afterAll(v) {
+				views = v;
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(views).toBe(context.values.get('module'));
 	});
 
-	test.skip('should call preExecute() when runs', () => {
-		// @TODO: Implement test case
+	test('should call beforeEach() on instance for each possible view', () => {
+		const
+			elements = document.querySelectorAll('.module'),
+			params = {numbers: [1, 2, 3, 42], data: {foo: 'bar'}},
+			calls = []
+		;
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View, params};
+			}
+
+			beforeEach(options, el, index) {
+				calls.push({options, el, index});
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(calls).toHaveLength(2);
+		expect(calls).toEqual([{
+			options: {el: elements[0], context, ...params},
+			el: elements[0],
+			index: 0
+		}, {
+			options: {el: elements[1], context, ...params},
+			el: elements[1],
+			index: 1
+		}]);
 	});
 
-	test.skip('should call postExecute() when runs', () => {
-		// @TODO: Implement test case
+	test('should not render views when beforeEach() returns "false"', () => {
+		const elements = document.querySelectorAll('.module');
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			beforeEach(options, el, index) {
+				if (index === 0) {
+					return false;
+				}
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(context.values.get('module')).toHaveLength(1);
+		expect(context.values.get('module')[0].el).toBe(elements[1]);
+	});
+
+	test('should call afterEach() on instance for each view', () => {
+		const
+			elements = document.querySelectorAll('.module'),
+			params = {numbers: [1, 2, 3, 42], data: {foo: 'bar'}},
+			calls = []
+		;
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View, params};
+			}
+
+			afterEach(view, el, index) {
+				calls.push({view, el, index});
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(calls).toHaveLength(2);
+		expect(calls).toEqual([{
+			view: {
+				el: elements[0],
+				options: {el: elements[0], context, ...params},
+				context
+			},
+			el: elements[0],
+			index: 0
+		}, {
+			view: {
+				el: elements[1],
+				options: {el: elements[1], context, ...params},
+				context
+			},
+			el: elements[1],
+			index: 1
+		}]);
+	});
+
+	test('should render views but not add them to namespace when afterEach() returns "false"', () => {
+		const elements = document.querySelectorAll('.module');
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			afterEach(options, el, index) {
+				if (index === 0) {
+					return false;
+				}
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(context.values.get('module')).toHaveLength(1);
+		expect(context.values.get('module')[0].el).toBe(elements[1]);
+	});
+
+	test('should execute all function in expected order', () => {
+		const calls = [];
+
+		class Action extends Initialize {
+			get settings() {
+				return {selector: '.module', namespace: 'module', view: View};
+			}
+
+			beforeAll() {
+				calls.push('beforeAll');
+			}
+
+			beforeEach() {
+				calls.push('beforeEach');
+			}
+
+			afterEach() {
+				calls.push('afterEach');
+			}
+
+			afterAll() {
+				calls.push('afterAll');
+			}
+		}
+
+		wire(Action);
+		execute();
+		expect(calls).toEqual([
+			'beforeAll',
+			'beforeEach',
+			'afterEach',
+			'beforeEach',
+			'afterEach',
+			'afterAll'
+		]);
 	});
 
 });

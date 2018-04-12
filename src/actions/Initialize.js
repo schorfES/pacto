@@ -81,15 +81,15 @@ export class Initialize {
 		// Overwrite this...
 	}
 
-	beforeEach(/* options, element, index */) {
+	beforeEach(/* options, el, index */) {
 		// Overwrite this...
 	}
 
-	afterAll() {
+	afterEach(/* view, el, index */) {
 		// Overwrite this...
 	}
 
-	afterEach(/* view, element, index */) {
+	afterAll(/* views */) {
 		// Overwrite this...
 	}
 

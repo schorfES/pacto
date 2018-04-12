@@ -1,6 +1,6 @@
 import * as pactoESM from '../dist/pacto.esm';
-import * as pactoUMD from '../dist/pacto.umd';
 import * as pactoMIN from '../dist/pacto.min';
+import * as pactoUMD from '../dist/pacto.umd';
 
 
 const PACTO_CLASS_NAMES = [

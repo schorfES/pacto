@@ -1,5 +1,5 @@
-import {Model} from './Model';
 import {EventEmitter} from './EventEmitter';
+import {Model} from './Model';
 
 
 describe('The model', () => {

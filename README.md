@@ -80,6 +80,8 @@ Pacto is _dependency free_, but it requires latest browser features.
 So you may need to add a polyfill for [WeakMap](https://www.npmjs.com/package/weakmap-polyfill).
 When using pacto's [Collection](#collection) or [Model](#model) you may also
 need a polyfill for [Proxy](https://www.npmjs.com/package/proxy-polyfill).
+When using [InitializeLazy](#lazyinitialize) you can also add a polyfill for
+[IntersectionObserver](https://www.npmjs.com/package/intersection-observer).
 
 Using dynamic imports, this boilerplate can be used to load all required
 polyfills before loading and running the app:
@@ -87,8 +89,9 @@ polyfills before loading and running the app:
 ```javascript
 (function(src){
 	Promise.all([
+		(!!window.WeakMap || import('weakmap-polyfill')),
 		(!!window.Proxy || import('proxy-polyfill')),
-		(!!window.WeakMap || import('weakmap-polyfill'))
+		(!!window.IntersectionObserver || import('intersection-observer')),
 	]).then(() => {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';

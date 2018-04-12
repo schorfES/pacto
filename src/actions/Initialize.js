@@ -74,7 +74,7 @@ export class Initialize {
 			context.values.add(settings.namespace, views);
 		}
 
-		this.afterAll();
+		this.afterAll(views);
 	}
 
 	beforeAll() {

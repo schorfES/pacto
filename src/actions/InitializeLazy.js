@@ -1,3 +1,18 @@
+function __getSettings(instance) {
+	const settings = instance.settings;
+
+	if (!settings || typeof settings !== 'object') {
+		throw new Error('Define settings object');
+	}
+
+	if (!settings.selector) {
+		throw new Error('Define a selector');
+	}
+
+	return settings;
+}
+
+
 export class InitializeLazy {
 
 	constructor() {
@@ -6,7 +21,7 @@ export class InitializeLazy {
 	}
 
 	get settings() {
-		return {};
+		return null;
 	}
 
 	get import() {
@@ -21,12 +36,7 @@ export class InitializeLazy {
 	}
 
 	run() {
-		const {settings} = this;
-
-		if (!settings.selector) {
-			throw new Error('Define a selector');
-		}
-
+		const settings = __getSettings(this);
 		this._lookup(settings.selector);
 	}
 
@@ -75,36 +85,35 @@ export class InitializeLazy {
 
 		this._fetched = true;
 		this.import.then((module) => {
-			const Initialize = module.Action || module.default;
+			const Action = module.Action || module.default;
 
-			if (!Initialize) {
-				throw new Error('Module must return Action or default');
+			if (!Action) {
+				throw new Error('Module must export Action or default');
 			}
 
-			if (!(typeof Initialize.prototype.run === 'function')) {
+			if (!(typeof Action.prototype.run === 'function')) {
 				throw new Error('Module must be an Action');
 			}
 
 			// Replace the proxy action with the loaded action
 			this.context.actions
-				.add(event.type, Initialize)
+				.add(event.type, Action)
 				.remove(event.type, this.constructor);
 
 			// Execute the current action:
-			this._execute(Initialize);
+			this._execute(Action);
 		});
 	}
 
-	_execute(Initialize) {
-		const action = new Initialize();
+	_execute(Action) {
+		const action = new Action();
 		action.context = this.context;
 		action.event = this.event;
 		action.run();
 	}
 
 	_onIntersect(entries) {
-		let isVisible = false;
-		entries.forEach((entry) => isVisible = entry.intersectionRatio > 0 || isVisible);
+		let isVisible = entries.some((entry) => entry.isIntersecting);
 
 		if (isVisible) {
 			this._release();

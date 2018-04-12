@@ -140,6 +140,19 @@ describe('The initialize action', () => {
 			.toEqual({el: elements[0], context, ...params});
 	});
 
+	test('should call render() on each view instance', () => {
+		const views = [];
+		class TestView extends View {
+			render() {
+				views.push(this);
+			}
+		}
+
+		setup({selector: '.module', namespace: 'module', view: TestView});
+		execute();
+		expect(views).toEqual(context.values.get('module'));
+	});
+
 	test('should call beforeAll() when runs', () => {
 		let callCount = 0;
 

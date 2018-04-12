@@ -39,7 +39,7 @@ export class Initialize {
 			{context, event} = this,
 			{data} = event,
 			views = context.values.get(settings.namespace) || [],
-			root = data && data.root ? root : document.body
+			root = data && data.root ? data.root : document.body
 		;
 
 		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {

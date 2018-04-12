@@ -70,7 +70,7 @@ export class Initialize {
 			views.push(view);
 		});
 
-		if (views.length) {
+		if (views.length > 0) {
 			context.values.add(settings.namespace, views);
 		}
 

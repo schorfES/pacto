@@ -75,7 +75,7 @@ describe('The initialize action', () => {
 	});
 
 	test('should fail when no view is defined in settings', () => {
-		setup({selector: '.module', amespace: 'module'});
+		setup({selector: '.module', namespace: 'module'});
 		expect(execute).toThrow(new Error('Define a view'));
 	});
 

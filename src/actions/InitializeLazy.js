@@ -34,7 +34,7 @@ export class InitializeLazy {
 		const
 			{event} = this,
 			{data} = event,
-			root = data && data.root ? root : document.body,
+			root = data && data.root ? data.root : document.body,
 			elements = root.querySelectorAll(selector)
 		;
 

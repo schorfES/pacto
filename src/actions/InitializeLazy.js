@@ -16,7 +16,7 @@ export class InitializeLazy {
 	get observerSettings() {
 		return {
 			rootMargin: '0px',
-			threshold: [0.0001, 0.9999]
+			threshold: [0, 0.5, 1]
 		};
 	}
 

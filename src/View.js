@@ -3,7 +3,7 @@ import {EventEmitter} from './EventEmitter';
 
 export class View extends EventEmitter {
 
-	constructor(options = {}) {
+	constructor(options) {
 		super();
 		this.options = options;
 		this.context = options.context;

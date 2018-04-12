@@ -5,5 +5,12 @@
 	"plugins": [
 		"syntax-dynamic-import",
 		"transform-object-rest-spread"
-	]
+	],
+	"env": {
+		"test": {
+			"plugins": [
+				"dynamic-import-node"
+			]
+		}
+	}
 }

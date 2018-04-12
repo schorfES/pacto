@@ -60,7 +60,8 @@ export class Initialize {
 				return;
 			}
 
-			view = new settings.view(options).render();
+			view = new settings.view(options);
+			view.render();
 
 			result = this.afterEach(view, el, index);
 			if (__isFalse(result)) {

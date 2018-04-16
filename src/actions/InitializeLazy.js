@@ -73,13 +73,18 @@ export class InitializeLazy {
 
 		this.import.then((module) => {
 			const Action = module.Action || module.default;
+			let error = null;
 
 			if (!Action) {
-				throw new Error('Module must export Action or default');
+				error = new Error('Module must export Action or default');
+				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
+				throw error;
 			}
 
 			if (!(typeof Action.prototype.run === 'function')) {
-				throw new Error('Module must be an Action');
+				error = new Error('Module must be an Action');
+				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
+				throw error;
 			}
 
 			// Replace the proxy action with the loaded action

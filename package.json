@@ -1,9 +1,15 @@
 {
   "name": "pacto",
-  "description": "A small MC* framework for non SPA websites.",
   "version": "0.0.1",
+  "description": "A lightweight framework for non SPA websites",
   "main": "dist/pacto.umd.js",
   "module": "dist/pacto.esm.js",
+  "keywords": [
+    "lightweight",
+    "frontend",
+    "framework",
+    "esnext"
+  ],
   "scripts": {
     "validate": "make validate",
     "tests": "make tests",

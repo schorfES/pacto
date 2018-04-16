@@ -55,9 +55,9 @@ occurs, an added action will run to execute a logic like to update a state, to
 fetch or to recalculate data.
 
 These actions allow creating modules. Each module should contain at least one
-initialize action but can be composed of multiple actions, models, collections,
-services view etc. This initialize action is meant to be the entry point of each
-module. It setups and executes its module:
+[initialize action](#initialize) but can be composed of multiple actions,
+models, collections, services view etc. This initialize action is meant to be
+the entry point of each module. It setups and executes its module:
 
 ![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/feature/modules/docs/app.png)
 
@@ -151,11 +151,105 @@ Read more about the [actions API](./docs/Context.md#actions).
 
 ##### Initialize
 
-@TODO: Add documentation
+The initialize action setups a module and wires a view to a DOM element. Each
+initialize action is described by its settings: `selector`, `view`, `namespace`.
+The selector is a CSS valid selector to define which, elements to use for each
+view instance. The created [view](#view) instance is grouped in a list of views
+by the initialize action. This list is stored inside the context values using a
+given namespace (take a look at [Values](#values)).
+
+```javascript
+// Initialize.js
+import {Initialize} from 'pacto';
+import {View} from 'mymodule/views/View';
+
+export class Action extends Initialize {
+	get settings() {
+		return {
+			selector: '.mymodule',
+			namespace: 'mymodule:views'
+			view: View
+		};
+	}
+}
+
+// App.js
+import {Context} from 'pacto';
+import {Action as MyModule} from 'mymodule/actions/Initialize';
+
+const context = new Context();
+context.action.add('app:start', [
+	MyModule,
+	// Add more modules here...
+]);
+context.trigger('app:start');
+```
+
+The initialize action of pacto ships some hooks which are called while executing
+and creating views. These hooks can be used by overwriting them:
+
+* `beforeAll()`
+* `beforeEach(options, el, index)`
+* `afterEach(view, el, index)`
+* `afterAll(views)`
+
+`beforeAll`, `beforeEach` and `afterEach` can return `false` to skip the current
+execution phase.
 
 ##### InitializeLazy
 
-@TODO: Add documentation
+Using an app bundler like webpack, parcel or rollup allows using code splitting
+by defining dynamic imports. Using them creates a smaller app build by
+separating them into chunks. The InitializeLazy action of pacto offers the
+possibility to simply use that feature and only load a certain module when its
+corresponding element exists inside the users DOM. If at least one of these
+elements is found and visible, the initialize action of that module will be
+imported, instantiated and executed. Once loaded the specific action will
+replace the lazy action.
+
+![pacto app module structure with lazy initialize action](https://raw.githubusercontent.com/schorfES/pacto/feature/modules/docs/appchunk.png)
+
+```javascript
+// Initialize.js
+import {Initialize} from 'pacto';
+import {View} from 'mymodule/views/View';
+
+export class Action extends Initialize {
+	get settings() {
+		return {
+			selector: '.mymodule',
+			namespace: 'mymodule:views'
+			view: View
+		};
+	}
+}
+
+// InitializeLazy.js
+import {InitializeLazy} from 'pacto';
+
+export class Action extends InitializeLazy {
+	get settings() {
+		return {
+			selector: '.mymodule',
+		};
+	}
+
+	get import() {
+		return import('mymodule/actions/Initialize');
+	}
+}
+
+// App.js
+import {Context} from 'pacto';
+import {Action as MyModule} from 'mymodule/actions/InitializeLazy';
+
+const context = new Context();
+context.action.add('app:start', [
+	MyModule,
+	// Add more modules here...
+]);
+context.trigger('app:start');
+```
 
 #### Values
 
@@ -245,7 +339,24 @@ collection.models.push({baz: 'bar'});
 
 ### View
 
-@TODO: Add documentation
+A view is a simple wrapper class for DOM elements. It holds the references to
+its DOM element and context. An instance of this class is meant to be the
+communicator between user interactions and pacto framework actions. It is also
+the right place to do complex renderings using virtual DOM libraries by
+overwriting the `render()` function.
+
+```javascript
+import {View} from 'pacto';
+
+class ToggleButton extends View {
+	render() {
+		this.el.addEventListener('click', (event) => {
+			this.el.classList.toggle('foo');
+			this.context.trigger('togglebutton:toggle');
+		});
+	}
+}
+```
 
 ### EventEmitter
 

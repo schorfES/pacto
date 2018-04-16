@@ -236,35 +236,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(__Resolver, [{
 			key: 'add',
-			value: function add(key, value) {
+			value: function add(namespace, value) {
 				var _refs$3$get = __refs$3.get(this),
 				    register = _refs$3$get.register;
 
-				register[key] = value;
+				register[namespace] = value;
 				return this;
 			}
 		}, {
 			key: 'remove',
-			value: function remove(key) {
+			value: function remove(namespace) {
 				var _refs$3$get2 = __refs$3.get(this),
 				    register = _refs$3$get2.register;
 
-				register[key] = undefined;
-				delete register[key];
+				register[namespace] = undefined;
+				delete register[namespace];
 				return this;
 			}
 		}, {
 			key: 'get',
-			value: function get(key) {
+			value: function get(namespace) {
 				var _refs$3$get3 = __refs$3.get(this),
 				    register = _refs$3$get3.register;
 
-				return register[key];
+				return register[namespace];
 			}
 		}, {
 			key: 'has',
-			value: function has(key) {
-				return !!this.get(key);
+			value: function has(namespace) {
+				return !!this.get(namespace);
 			}
 		}]);
 
@@ -380,8 +380,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return Context;
 	}(EventEmitter);
 
-	function __isBoolean(value) {
-		return typeof value === 'boolean';
+	function __isFalse(value) {
+		return typeof value === 'boolean' && !value;
+	}
+
+	function __getSettings(instance) {
+		var settings = instance.settings;
+
+		if (!settings || (typeof settings === 'undefined' ? 'undefined' : _typeof(settings)) !== 'object') {
+			throw new Error('Define settings object');
+		}
+
+		if (!settings.view) {
+			throw new Error('Define a view');
+		}
+
+		if (!settings.selector) {
+			throw new Error('Define a selector');
+		}
+
+		if (!settings.namespace) {
+			throw new Error('Define a namespace');
+		}
+
+		return settings;
 	}
 
 	var Initialize = function () {
@@ -394,58 +416,52 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function run() {
 				var _this6 = this;
 
-				this.beforeAll();
-
-				var context = this.context,
+				var settings = __getSettings(this),
+				    context = this.context,
 				    event = this.event,
-				    settings = this.settings,
 				    data = event.data,
-				    viewoptions = settings.viewoptions,
 				    views = context.values.get(settings.namespace) || [],
-				    root = data && data.root ? root : document.body;
+				    root = data && data.root ? data.root : document.body;
 
 
-				if (!settings.viewclass) {
-					throw new Error('Define a view class');
-				}
+				var result = void 0;
 
-				if (!settings.selector) {
-					throw new Error('Define a selector');
-				}
-
-				if (!settings.namespace) {
-					throw new Error('Define a namespace');
+				result = this.beforeAll();
+				if (__isFalse(result)) {
+					return;
 				}
 
 				[].concat(_toConsumableArray(root.querySelectorAll(settings.selector))).forEach(function (el, index) {
-					var options = _extends({ el: el, context: context }, viewoptions);
-					var result = null,
-					    view = null;
-
-					result = _this6.beforeEach(options, el, index);
-					if (!__isBoolean(result)) {
-						throw new Error('The return value of beforeEach() must be a boolean.');
-					} else if (!result) {
+					if (views.some(function (view) {
+						return view.el == el;
+					})) {
 						return;
 					}
 
-					view = new settings.viewclass(options).render();
+					var options = _extends({ el: el, context: context }, settings.params);
+					var view = null;
+
+					result = _this6.beforeEach(options, el, index);
+					if (__isFalse(result)) {
+						return;
+					}
+
+					view = new settings.view(options);
+					view.render();
 
 					result = _this6.afterEach(view, el, index);
-					if (!__isBoolean(result)) {
-						throw new Error('The return value of afterEach() must be a boolean.');
-					} else if (!result) {
+					if (__isFalse(result)) {
 						return;
 					}
 
 					views.push(view);
 				});
 
-				if (views.length) {
+				if (views.length > 0) {
 					context.values.add(settings.namespace, views);
 				}
 
-				this.afterAll();
+				this.afterAll(views);
 			}
 		}, {
 			key: 'beforeAll',
@@ -454,49 +470,54 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'beforeEach',
-			value: function beforeEach() /* options, element, index */{
-				// Overwrite this...
-				return true;
-			}
-		}, {
-			key: 'afterAll',
-			value: function afterAll() {
+			value: function beforeEach() /* options, el, index */{
 				// Overwrite this...
 			}
 		}, {
 			key: 'afterEach',
-			value: function afterEach() /* view, element, index */{
+			value: function afterEach() /* view, el, index */{
 				// Overwrite this...
-				return true;
+			}
+		}, {
+			key: 'afterAll',
+			value: function afterAll() /* views */{
+				// Overwrite this...
 			}
 		}, {
 			key: 'settings',
 			get: function get() {
-				return {};
+				return null;
 			}
 		}]);
 
 		return Initialize;
 	}();
 
+	function __getSettings$1(instance) {
+		var settings = instance.settings;
+
+		if (!settings || (typeof settings === 'undefined' ? 'undefined' : _typeof(settings)) !== 'object') {
+			throw new Error('Define settings object');
+		}
+
+		if (!settings.selector) {
+			throw new Error('Define a selector');
+		}
+
+		return settings;
+	}
+
 	var InitializeLazy = function () {
 		function InitializeLazy() {
 			_classCallCheck(this, InitializeLazy);
 
 			this._onIntersect = this._onIntersect.bind(this);
-			this._fetched = false;
 		}
 
 		_createClass(InitializeLazy, [{
 			key: 'run',
 			value: function run() {
-				var settings = this.settings;
-
-
-				if (!settings.selector) {
-					throw new Error('Define a selector');
-				}
-
+				var settings = __getSettings$1(this);
 				this._lookup(settings.selector);
 			}
 		}, {
@@ -504,16 +525,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _lookup(selector) {
 				var event = this.event,
 				    data = event.data,
-				    root = data && data.root ? root : document.body,
+				    root = data && data.root ? data.root : document.body,
 				    elements = root.querySelectorAll(selector);
 
 
-				if (elements.length) {
-					if (window.IntersectionObserver) {
-						this._observe(elements);
-					} else {
-						this._fetch();
-					}
+				if (elements.length === 0) {
+					return;
+				}
+
+				if (window.IntersectionObserver) {
+					this._observe(elements);
+				} else {
+					this._fetch();
 				}
 			}
 		}, {
@@ -521,22 +544,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function _observe(elements) {
 				var _this7 = this;
 
-				this._observers = [].concat(_toConsumableArray(elements)).map(function (element) {
-					var observer = new window.IntersectionObserver(_this7._onIntersect, _this7.observerSettings);
-
-					observer.observe(element);
-					return observer;
+				this._observer = new window.IntersectionObserver(this._onIntersect, this.observerSettings);
+				[].concat(_toConsumableArray(elements)).forEach(function (element) {
+					return _this7._observer.observe(element);
 				});
 			}
 		}, {
-			key: '_release',
-			value: function _release() {
-				if (this._observers && this._observers.length) {
-					this._observers.forEach(function (observer) {
-						return observer.disconnect();
-					});
-					this._observers = null;
-				}
+			key: '_disconnect',
+			value: function _disconnect() {
+				this._observer.disconnect();
+				this._observer = null;
 			}
 		}, {
 			key: '_fetch',
@@ -546,33 +563,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var event = this.event;
 
 
-				if (this._fetched) {
-					return;
-				}
-
-				this._fetched = true;
 				this.import.then(function (module) {
-					var Initialize = module.Action || module.default;
+					var Action = module.Action || module.default;
+					var error = null;
 
-					if (!Initialize) {
-						throw new Error('Module must return Action or default');
+					if (!Action) {
+						error = new Error('Module must export Action or default');
+						_this8.context.trigger(_this8.event.type + ':error', { error: error }); // Only for testing reasons
+						throw error;
 					}
 
-					if (!(typeof Initialize.prototype.run === 'function')) {
-						throw new Error('Module must be an Action');
+					if (!(typeof Action.prototype.run === 'function')) {
+						error = new Error('Module must be an Action');
+						_this8.context.trigger(_this8.event.type + ':error', { error: error }); // Only for testing reasons
+						throw error;
 					}
 
 					// Replace the proxy action with the loaded action
-					_this8.context.actions.add(event.type, Initialize).remove(event.type, _this8.constructor);
+					_this8.context.actions.add(event.type, Action).remove(event.type, _this8.constructor);
 
 					// Execute the current action:
-					_this8._execute(Initialize);
+					_this8._execute(Action);
 				});
 			}
 		}, {
 			key: '_execute',
-			value: function _execute(Initialize) {
-				var action = new Initialize();
+			value: function _execute(Action) {
+				var action = new Action();
 				action.context = this.context;
 				action.event = this.event;
 				action.run();
@@ -580,20 +597,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: '_onIntersect',
 			value: function _onIntersect(entries) {
-				var isVisible = false;
-				entries.forEach(function (entry) {
-					return isVisible = entry.intersectionRatio > 0 || isVisible;
+				var isVisible = entries.some(function (entry) {
+					return entry.isIntersecting;
 				});
 
 				if (isVisible) {
-					this._release();
+					this._disconnect();
 					this._fetch();
 				}
 			}
 		}, {
 			key: 'settings',
 			get: function get() {
-				return {};
+				return null;
 			}
 		}, {
 			key: 'import',
@@ -605,7 +621,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			get: function get() {
 				return {
 					rootMargin: '0px',
-					threshold: [0.0001, 0.9999]
+					threshold: [0, 0.5, 1]
 				};
 			}
 		}]);
@@ -616,9 +632,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var View = function (_EventEmitter4) {
 		_inherits(View, _EventEmitter4);
 
-		function View() {
-			var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+		function View(options) {
 			_classCallCheck(this, View);
 
 			var _this9 = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this));

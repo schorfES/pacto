@@ -59,7 +59,7 @@ initialize action but can be composed of multiple actions, models, collections,
 services view etc. This initialize action is meant to be the entry point of each
 module. It setups and executes its module:
 
-@TODO: Insert diagram of the module structure
+![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/feature/modules/docs/app.svg)
 
 The state management in pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.

@@ -18,26 +18,26 @@ class __Resolver {
 		__refs.set(this, refs);
 	}
 
-	add(key, value) {
+	add(namespace, value) {
 		const {register} = __refs.get(this);
-		register[key] = value;
+		register[namespace] = value;
 		return this;
 	}
 
-	remove(key) {
+	remove(namespace) {
 		const {register} = __refs.get(this);
-		register[key] = undefined;
-		delete(register[key]);
+		register[namespace] = undefined;
+		delete(register[namespace]);
 		return this;
 	}
 
-	get(key) {
+	get(namespace) {
 		const {register} = __refs.get(this);
-		return register[key];
+		return register[namespace];
 	}
 
-	has(key) {
-		return !!this.get(key);
+	has(namespace) {
+		return !!this.get(namespace);
 	}
 
 }

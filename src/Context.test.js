@@ -197,72 +197,72 @@ describe('The context "values" resolver', () => {
 		context = null;
 	});
 
-	test('.add() adds a value by key', () => {
+	test('.add() adds a value by namespace', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		context.values.add(key, value);
+		context.values.add(namespace, value);
 
-		expect(context.values.get(key)).toBe(value);
+		expect(context.values.get(namespace)).toBe(value);
 	});
 
-	test('.add() overwrites an existing value by key', () => {
+	test('.add() overwrites an existing value by namespace', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		context.values.add(key, value);
-		context.values.add(key, 'other:value');
+		context.values.add(namespace, value);
+		context.values.add(namespace, 'other:value');
 
-		expect(context.values.get(key)).toBe('other:value');
+		expect(context.values.get(namespace)).toBe('other:value');
 	});
 
 	test('.add() is chainable', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		expect(context.values.add(key, value)).toBe(context.values);
+		expect(context.values.add(namespace, value)).toBe(context.values);
 	});
 
-	test('.has() returns boolean if has stored value by key', () => {
+	test('.has() returns boolean if has stored value by namespace', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		context.values.add(key, value);
+		context.values.add(namespace, value);
 
-		expect(context.values.has(key)).toBeTruthy();
-		expect(context.values.has('other:key')).not.toBeTruthy();
+		expect(context.values.has(namespace)).toBeTruthy();
+		expect(context.values.has('other:namespace')).not.toBeTruthy();
 	});
 
-	test('.get() returns stored value by key', () => {
+	test('.get() returns stored value by namespace', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		context.values.add(key, value);
+		context.values.add(namespace, value);
 
-		expect(context.values.get(key)).toBe(value);
+		expect(context.values.get(namespace)).toBe(value);
 	});
 
-	test('.remove() removes stored value by key', () => {
+	test('.remove() removes stored value by namespace', () => {
 		const
-			key = 'key:name',
+			namespace = 'name:space',
 			value = 'some:value'
 		;
 
-		context.values.add(key, value);
-		context.values.remove(key);
+		context.values.add(namespace, value);
+		context.values.remove(namespace);
 
-		expect(context.values.has(key)).not.toBeTruthy();
-		expect(context.values.get(key)).toBe(undefined);
+		expect(context.values.has(namespace)).not.toBeTruthy();
+		expect(context.values.get(namespace)).toBe(undefined);
 	});
 
 });

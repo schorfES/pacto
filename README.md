@@ -59,7 +59,7 @@ These actions allow creating modules. Each module should contain at least one
 models, collections, services view etc. This initialize action is meant to be
 the entry point of each module. It setups and executes its module:
 
-![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/feature/modules/docs/app.png)
+![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/master/docs/app.png)
 
 The state management in pacto is not solved using a giant monolithic state
 object. It comes with classic _backbone inspired_ model and collection classes.
@@ -207,7 +207,7 @@ elements is found and visible, the initialize action of that module will be
 imported, instantiated and executed. Once loaded the specific action will
 replace the lazy action.
 
-![pacto app module structure with lazy initialize action](https://raw.githubusercontent.com/schorfES/pacto/feature/modules/docs/appchunk.png)
+![pacto app module structure with lazy initialize action](https://raw.githubusercontent.com/schorfES/pacto/master/docs/appchunk.png)
 
 ```javascript
 // Initialize.js

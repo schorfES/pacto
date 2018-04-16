@@ -160,19 +160,19 @@ Read more about the [actions API](./docs/Context.md#actions).
 #### Values
 
 The `.values` property of a context instance is a key/value storage. Each
-type of value can be stored using a unique key.
+type of value can be stored using a unique namespace (key).
 
 ```javascript
 import {Context} from 'pacto';
 
 const context = new Context();
-context.values.add('key:name', {foo: 'bar'});
-console.log(context.values.has('key:name')); // logs: true
-console.log(context.values.get('key:name')); // logs: {foo: 'bar'}
+context.values.add('name:space', {foo: 'bar'});
+console.log(context.values.has('name:space')); // logs: true
+console.log(context.values.get('name:space')); // logs: {foo: 'bar'}
 
-context.values.remove('key:name');
-console.log(context.values.has('key:name')); // logs: false
-console.log(context.values.get('key:name')); // logs: undefined
+context.values.remove('name:space');
+console.log(context.values.has('name:space')); // logs: false
+console.log(context.values.get('name:space')); // logs: undefined
 ```
 
 Read more about the [values API](./docs/Context.md#values).

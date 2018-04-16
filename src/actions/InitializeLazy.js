@@ -17,7 +17,6 @@ export class InitializeLazy {
 
 	constructor() {
 		this._onIntersect = this._onIntersect.bind(this);
-		this._fetched = false;
 	}
 
 	get settings() {
@@ -48,42 +47,30 @@ export class InitializeLazy {
 			elements = root.querySelectorAll(selector)
 		;
 
-		if (elements.length) {
-			if (window.IntersectionObserver) {
-				this._observe(elements);
-			} else {
-				this._fetch();
-			}
+		if (elements.length === 0) {
+			return;
+		}
+
+		if (window.IntersectionObserver) {
+			this._observe(elements);
+		} else {
+			this._fetch();
 		}
 	}
 
 	_observe(elements) {
-		this._observers = [...elements].map((element) => {
-			const observer = new window.IntersectionObserver(
-				this._onIntersect,
-				this.observerSettings
-			);
-
-			observer.observe(element);
-			return observer;
-		});
+		this._observer = new window.IntersectionObserver(this._onIntersect, this.observerSettings);
+		[...elements].forEach((element) => this._observer.observe(element));
 	}
 
-	_release() {
-		if (this._observers && this._observers.length) {
-			this._observers.forEach((observer) => observer.disconnect());
-			this._observers = null;
-		}
+	_disconnect() {
+		this._observer.disconnect();
+		this._observer = null;
 	}
 
 	_fetch() {
 		const {event} = this;
 
-		if (this._fetched) {
-			return;
-		}
-
-		this._fetched = true;
 		this.import.then((module) => {
 			const Action = module.Action || module.default;
 
@@ -113,10 +100,10 @@ export class InitializeLazy {
 	}
 
 	_onIntersect(entries) {
-		let isVisible = entries.some((entry) => entry.isIntersecting);
+		const isVisible = entries.some((entry) => entry.isIntersecting);
 
 		if (isVisible) {
-			this._release();
+			this._disconnect();
 			this._fetch();
 		}
 	}

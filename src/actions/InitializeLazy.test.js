@@ -120,7 +120,7 @@ describe('The lazy initialize action', () => {
 		execute();
 
 		// Creates observers?
-		expect(MockIO).toHaveBeenCalledTimes(2);
+		expect(MockIO).toHaveBeenCalledTimes(1);
 		expect(MockIO.mock.calls[0]).toHaveLength(2);
 		expect(MockIO.mock.calls[0][0]).toBeInstanceOf(Function);
 		expect(MockIO.mock.calls[0][1]).toEqual({
@@ -129,9 +129,9 @@ describe('The lazy initialize action', () => {
 		});
 
 		// Is observed?
-		expect(observers[0].observe).toHaveBeenCalledTimes(1);
-		expect(observers[0].observe).toHaveBeenCalledWith(elements[0]);
-		expect(observers[1].observe).toHaveBeenCalledWith(elements[1]);
+		expect(observers[0].observe).toHaveBeenCalledTimes(2);
+		expect(observers[0].observe.mock.calls[0]).toEqual([elements[0]]);
+		expect(observers[0].observe.mock.calls[1]).toEqual([elements[1]]);
 	});
 
 	test('should observe elements with intersection observer depending on root', () => {
@@ -145,6 +145,12 @@ describe('The lazy initialize action', () => {
 		expect(MockIO).toHaveBeenCalledTimes(1);
 		expect(observers[0].observe).toHaveBeenCalledTimes(1);
 		expect(observers[0].observe).toHaveBeenCalledWith(elements[0]);
+	});
+
+	test('should skip when not find any elements to observe', () => {
+		setup({selector: '.foo'});
+		execute();
+		expect(MockIO).not.toHaveBeenCalled();
 	});
 
 	test('should not import and execute action when no element is intersecting', () => {
@@ -227,14 +233,9 @@ describe('The lazy initialize action', () => {
 		execute(() => {
 			expect(observers[0].disconnect).toHaveBeenCalledTimes(1);
 			expect(observers[0].disconnect).toHaveBeenCalledWith();
-			expect(observers[1].disconnect).toHaveBeenCalledWith();
 			done();
 		});
 		intersect();
-	});
-
-	test.skip('should not import module twice', () => {
-		// @TODO: How to test if "import" is called twice?
 	});
 
 	test('should import module immediately when intersection observer is not supported', (done) => {

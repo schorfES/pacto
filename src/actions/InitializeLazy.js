@@ -13,6 +13,13 @@ function __getSettings(instance) {
 }
 
 
+
+/**
+ * The InitializeLazy Action
+ *
+ * @class
+ * @module InitializeLazy
+ */
 export class InitializeLazy {
 
 	constructor() {

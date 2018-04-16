@@ -1,6 +1,11 @@
 const __refs = new WeakMap();
 
-
+/**
+ * The EventEmitter
+ *
+ * @class
+ * @module EventEmitter
+ */
 export class EventEmitter {
 
 	constructor() {

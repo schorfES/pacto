@@ -2,6 +2,11 @@
 
 
 docs:
+	node_modules/.bin/doxdox \
+		'src/**/*.js' \
+		--layout markdown \
+		--output DOCUMENTATION.md
+
 	node_modules/.bin/doctoc \
 		./README.md
 

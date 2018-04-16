@@ -1,6 +1,13 @@
 import {EventEmitter} from './EventEmitter';
 
 
+/**
+ * The view
+ *
+ * @class
+ * @module Context
+ * @extends EventEmitter
+ */
 export class View extends EventEmitter {
 
 	constructor(options) {

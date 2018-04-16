@@ -4,6 +4,13 @@ import {EventEmitter} from './EventEmitter';
 const __refs = new WeakMap();
 
 
+/**
+ * The Model
+ *
+ * @class
+ * @module Context
+ * @extends EventEmitter
+ */
 export class Model extends EventEmitter {
 
 	constructor(props = {}) {

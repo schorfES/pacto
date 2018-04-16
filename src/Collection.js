@@ -5,6 +5,13 @@ import {Model} from './Model';
 const __refs = new WeakMap();
 
 
+/**
+ * The Collection
+ *
+ * @class
+ * @module Context
+ * @extends EventEmitter
+ */
 export class Collection extends EventEmitter {
 
 	constructor(models = []) {

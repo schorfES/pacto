@@ -114,7 +114,13 @@ class __Actions extends __Resolver {
 
 }
 
-
+/**
+ * The context
+ *
+ * @class
+ * @module Context
+ * @extends EventEmitter
+ */
 export class Context extends EventEmitter {
 
 	constructor() {
@@ -125,10 +131,20 @@ export class Context extends EventEmitter {
 		});
 	}
 
+	/**
+	 * Returns the actions interface.
+	 *
+	 * @return {Resolver} interface to handle actions.
+	 */
 	get actions() {
 		return __refs.get(this).actions;
 	}
 
+	/**
+	 * Returns the values interface.
+	 *
+	 * @return {Resolver} interface to handle values.
+	 */
 	get values() {
 		return __refs.get(this).values;
 	}

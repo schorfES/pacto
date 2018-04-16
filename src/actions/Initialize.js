@@ -25,6 +25,12 @@ function __getSettings(instance) {
 }
 
 
+/**
+ * The Initialize Action
+ *
+ * @class
+ * @module Initialize
+ */
 export class Initialize {
 
 	get settings() {

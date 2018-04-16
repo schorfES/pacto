@@ -151,10 +151,10 @@ Read more about the [actions API](./docs/Context.md#actions).
 
 ##### Initialize
 
-The initialize action setups a module and wires a view to a DOM element. Each
+The initialize action setups a module and wires a [view](#view) to a DOM element. Each
 initialize action is described by its settings: `selector`, `view`, `namespace`.
-The selector is a CSS valid selector to define which, elements to use for each
-view instance. The created [view](#view) instance is grouped in a list of views
+The selector is a CSS valid selector to define which elements to use for each
+view instance. The created view instance is grouped in a list of views
 by the initialize action. This list is stored inside the context values using a
 given namespace (take a look at [Values](#values)).
 
@@ -241,11 +241,11 @@ export class Action extends InitializeLazy {
 
 // App.js
 import {Context} from 'pacto';
-import {Action as MyModule} from 'mymodule/actions/InitializeLazy';
+import {Action as MyLazyModule} from 'mymodule/actions/InitializeLazy';
 
 const context = new Context();
 context.action.add('app:start', [
-	MyModule,
+	MyLazyModule,
 	// Add more modules here...
 ]);
 context.trigger('app:start');

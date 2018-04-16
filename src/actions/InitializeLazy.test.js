@@ -193,10 +193,13 @@ describe('The lazy initialize action', () => {
 		]);
 	});
 
-	test.skip('should fail when import action with incorrect module export', (done) => {
-		// @TODO: This doesn't work
-		process.once('unhandledRejection', error => {
-			expect(error).toEqual(new Error('Module must export Action or default'));
+	test('should fail when import action with incorrect module export', (done) => {
+		// @TODO: UnhandledPromiseRejectionWarning: Unhandled promise rejection.
+		// This error originated either by throwing inside of an async function
+		// without a catch block, or by rejecting a promise which was not
+		// handled with .catch().
+		context.on(EVENT_NAME + ':error', (event) => {
+			expect(event.data.error).toEqual(new Error('Module must export Action or default'));
 			done();
 		});
 		setup(SETTINGS, PATH_INCORRECT_MODULE);
@@ -204,10 +207,13 @@ describe('The lazy initialize action', () => {
 		intersect();
 	});
 
-	test.skip('should fail when import class with no run() method', (done) => {
-		// @TODO: This doesn't work
-		process.once('unhandledRejection', error => {
-			expect(error).toEqual(new Error('Module must be an Action'));
+	test('should fail when import class with no run() method', (done) => {
+		// @TODO: UnhandledPromiseRejectionWarning: Unhandled promise rejection.
+		// This error originated either by throwing inside of an async function
+		// without a catch block, or by rejecting a promise which was not
+		// handled with .catch().
+		context.on(EVENT_NAME + ':error', (event) => {
+			expect(event.data.error).toEqual(new Error('Module must be an Action'));
 			done();
 		});
 		setup(SETTINGS, PATH_NOT_AN_ACTION);

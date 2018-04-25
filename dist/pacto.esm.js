@@ -345,7 +345,7 @@ class Initialize {
 		}
 
 		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {
-			if (views.some((view) => view.el == el)) {
+			if (views.some((view) => view.el === el)) {
 				return;
 			}
 

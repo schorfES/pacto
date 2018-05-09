@@ -1,4 +1,4 @@
-.PHONY:  docs validate tests coverage build build_sem build_umd build_min
+.PHONY:  docs validate tests coverage build
 
 
 docs:

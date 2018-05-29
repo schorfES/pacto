@@ -4,12 +4,10 @@ import * as umd from '../dist/pacto.umd';
 
 
 const CLASSES = [
-	'Collection',
 	'Context',
 	'EventEmitter',
 	'Initialize',
 	'InitializeLazy',
-	'Model',
 	'View'
 ];
 

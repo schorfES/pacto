@@ -84,7 +84,6 @@ polyfills before loading and running the app:
 (function(src){
 	Promise.all([
 		(!!window.WeakMap || import('weakmap-polyfill')),
-		(!!window.Proxy || import('proxy-polyfill')),
 		(!!window.IntersectionObserver || import('intersection-observer')),
 	]).then(() => {
 		var script = document.createElement('script');

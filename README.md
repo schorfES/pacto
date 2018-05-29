@@ -21,8 +21,6 @@ A lightweight framework for non SPA websites.
       - [Initialize](#initialize)
       - [InitializeLazy](#initializelazy)
     - [Values](#values)
-  - [Model](#model)
-  - [Collection](#collection)
   - [View](#view)
   - [EventEmitter](#eventemitter)
 - [License](#license)
@@ -57,15 +55,13 @@ fetch or to recalculate data.
 
 These actions allow creating modules. Each module should contain at least one
 [initialize action](#initialize) but can be composed of multiple actions,
-models, collections, services view etc. This initialize action is meant to be
+stores, states, services, views etc. This initialize action is meant to be
 the entry point of each module. It setups and executes its module:
 
 ![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/master/docs/app.png)
 
-The state management in pacto is not solved using a giant monolithic state
-object. It comes with classic _backbone inspired_ model and collection classes.
-Instances of them or any other object can be stored and accessed through the
-context like a simple key/value store.
+The state management is not solved by pacto, but there is small _backbone inspired_
+model and collection extension for pacto called [pacto-model](https://github.com/schorfES/pacto-model).
 
 ## Installation
 
@@ -79,8 +75,6 @@ npm install pacto --save
 
 Pacto is _dependency free_, but it requires latest browser features.
 So you may need to add a polyfill for [WeakMap](https://www.npmjs.com/package/weakmap-polyfill).
-When using pacto's [Collection](#collection) or [Model](#model) you may also
-need a polyfill for [Proxy](https://www.npmjs.com/package/proxy-polyfill).
 When using [InitializeLazy](#initializelazy) you can also add a polyfill for
 [IntersectionObserver](https://www.npmjs.com/package/intersection-observer).
 
@@ -271,72 +265,6 @@ console.log(context.values.get('name:space')); // logs: undefined
 ```
 
 Read more about the [values API](./docs/Context.md#values).
-
-### Model
-
-A model is an observed object. It detects changes to its properties and
-dispatches a `'change'` event. All properties of a model instance are accessible
-through the `.props` property.
-
-```javascript
-import {Model} from 'pacto';
-
-const data = {foo: 'bar'};
-const model = new Model(data);
-
-model.on('change', () => console.log(model.props)); // logs: {foo: 'baz'}
-model.props.foo = 'baz';
-```
-
-A model can be created using defaults for its properties. If one or more of
-these properties are not passed into the model, the model will use the
-predefined default values until the value will be set.
-
-```javascript
-import {Model} from 'pacto';
-
-class MyModel extends Model {
-	get defaults() {
-		return {foo: 'foo', baz: 'baz'};
-	}
-}
-
-const data = {foo: 'bar'};
-const model = new MyModel(data);
-console.log(model.props); // logs: {foo: 'bar', baz: 'baz'}
-```
-
-### Collection
-
-A collection is an observed array of [Models](#model). These models are
-accessible through the `.models` property. This property offers all
-[array functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
-When one of these functions changes the array, the collection instance
-dispatches a `'change'` event.
-
-All items which are passed into the collection will be transformed into a
-[Model](#model). Which type of Model should be used is defined in the `.Model`
-getter of a Collection instance.
-
-```javascript
-import {Collection, Model} from 'pacto';
-
-class MyModel extends Model {
-	get defaults() {
-		return {foo: 'foo', baz: 'baz'};
-	}
-}
-
-class MyCollection extends Collection {
-	get Model() {
-		return MyModel;
-	}
-}
-
-const collection = new MyCollection([{foo: 'bar'}]);
-collection.on('change', () => console.log(collection.models)); // logs: [{foo: 'bar', baz: 'baz'}, {foo: 'foo', baz: 'bar'}]
-collection.models.push({baz: 'bar'});
-```
 
 ### View
 

@@ -1,10 +1,10 @@
-import * as pacto from './index';
+import * as lib from './index';
 
 
 describe('The entry', () => {
 
 	test('exports all components', () => {
-		expect(Object.keys(pacto)).toEqual([
+		expect(Object.keys(lib)).toEqual([
 			'Collection',
 			'Context',
 			'EventEmitter',

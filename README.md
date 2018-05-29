@@ -39,9 +39,8 @@ _virtual DOM_ of that framework. This may results in a higher _time to
 interactive_ due to network traffic, parse, interpret and execution time.
 
 Pacto tries to reduce those problems by shipping small features which are using
-latest browser features like [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy),
-[IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver) and
-[WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakmap).
+latest browser features like [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver)
+and [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Weakmap).
 
 ## The Concepts
 

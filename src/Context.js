@@ -59,7 +59,7 @@ class __Actions extends __Resolver {
 			;
 
 			if (actions) {
-				actions.forEach((Action) => {
+				[].concat(actions).forEach((Action) => {
 					var action = new Action();
 					action.context = context;
 					action.event = event;

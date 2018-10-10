@@ -59,8 +59,8 @@ the entry point of each module. It setups and executes its module:
 
 ![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/master/docs/app.png)
 
-The state management is not solved by pacto, but there is small _backbone inspired_
-model and collection extension for pacto called [pacto-model](https://github.com/schorfES/pacto-model).
+The state management is not solved by pacto, but there is small _backbone/mobx inspired_
+model and collection extension for pacto called [pacto.model](https://github.com/schorfES/pacto.model).
 
 ## Installation
 

@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "validate": "make validate",
-    "test": "make tests",
+    "test": "snyk test && make tests",
     "coverage": "make coverage",
     "docs": "make docs",
     "build": "make build"
@@ -41,6 +41,7 @@
     "jest": "^23.6.0",
     "live-server": "^1.2.0",
     "rollup": "^0.57.1",
+    "snyk": "^1.103.0",
     "uglify-js": "^3.4.9"
   }
 }

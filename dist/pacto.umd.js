@@ -17,6 +17,20 @@
 		value: true
 	});
 
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];
+
+			for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}
+
+		return target;
+	};
+
 	function _toConsumableArray(arr) {
 		if (Array.isArray(arr)) {
 			for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
@@ -34,6 +48,14 @@
 	} : function (obj) {
 		return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 	};
+
+	function _possibleConstructorReturn(self, call) {
+		if (!self) {
+			throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		}
+
+		return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	}
 
 	var _get = function get(object, property, receiver) {
 		if (object === null) object = Function.prototype;
@@ -59,28 +81,6 @@
 			return getter.call(receiver);
 		}
 	};
-
-	var _extends = Object.assign || function (target) {
-		for (var i = 1; i < arguments.length; i++) {
-			var source = arguments[i];
-
-			for (var key in source) {
-				if (Object.prototype.hasOwnProperty.call(source, key)) {
-					target[key] = source[key];
-				}
-			}
-		}
-
-		return target;
-	};
-
-	function _possibleConstructorReturn(self, call) {
-		if (!self) {
-			throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-		}
-
-		return call && (typeof call === "object" || typeof call === "function") ? call : self;
-	}
 
 	function _inherits(subClass, superClass) {
 		if (typeof superClass !== "function" && superClass !== null) {
@@ -186,142 +186,6 @@
 
 	var __refs$1 = new WeakMap();
 
-	var Model = function (_EventEmitter) {
-		_inherits(Model, _EventEmitter);
-
-		function Model() {
-			var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-			_classCallCheck(this, Model);
-
-			var _this2 = _possibleConstructorReturn(this, (Model.__proto__ || Object.getPrototypeOf(Model)).call(this));
-
-			props = _extends({}, _this2.defaults, props);
-
-			var handler = {
-				set: function set(target, property, value) {
-					var isChanged = target[property] !== value;
-					target[property] = value;
-
-					if (isChanged) {
-						_this2.trigger('change', { prop: property, value: value });
-					}
-
-					return true;
-				}
-			},
-			    proxy = new Proxy(props, handler);
-
-			__refs$1.set(_this2, proxy);
-			return _this2;
-		}
-
-		_createClass(Model, [{
-			key: 'defaults',
-			get: function get() {
-				return null;
-			}
-		}, {
-			key: 'props',
-			get: function get() {
-				return __refs$1.get(this);
-			}
-		}]);
-
-		return Model;
-	}(EventEmitter);
-
-	var __refs$2 = new WeakMap();
-
-	var Collection = function (_EventEmitter2) {
-		_inherits(Collection, _EventEmitter2);
-
-		function Collection() {
-			var models = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-			_classCallCheck(this, Collection);
-
-			var _this3 = _possibleConstructorReturn(this, (Collection.__proto__ || Object.getPrototypeOf(Collection)).call(this));
-
-			var enshureIsModel = function enshureIsModel(model) {
-				return model instanceof Model ? model : new _this3.Model(model);
-			},
-			    handler = {
-				get: function get(target, property) {
-					var method = target[property];
-
-					if (typeof method === 'function') {
-						return function () {
-							for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-								args[_key] = arguments[_key];
-							}
-
-							var isChanged = false,
-							    result = void 0;
-
-							switch (property) {
-								case 'pop':
-								case 'reverse':
-								case 'shift':
-								case 'sort':
-									isChanged = true;
-									break;
-
-								case 'fill':
-									isChanged = true;
-									args[0] = enshureIsModel(args[0]);
-									break;
-
-								case 'push':
-								case 'unshift':
-									isChanged = true;
-									args = args.map(enshureIsModel);
-									break;
-
-								case 'splice':
-									isChanged = true;
-									args = args.map(function (arg, index) {
-										return index > 1 ? enshureIsModel(arg) : arg;
-									});
-									break;
-							}
-
-							result = method.apply(target, args);
-
-							if (isChanged) {
-								_this3.trigger('change', { method: property });
-							}
-
-							return result;
-						};
-					}
-
-					return method;
-				}
-			},
-			    proxy = new Proxy(models.map(enshureIsModel), handler);
-
-			__refs$2.set(_this3, proxy);
-			return _this3;
-		}
-
-		_createClass(Collection, [{
-			key: 'Model',
-			get: function get() {
-				return Model;
-			}
-		}, {
-			key: 'models',
-			get: function get() {
-				return __refs$2.get(this);
-			}
-		}]);
-
-		return Collection;
-	}(EventEmitter);
-
-	var __refs$3 = new WeakMap();
-
 	var __Resolver = function () {
 		function __Resolver(context) {
 			_classCallCheck(this, __Resolver);
@@ -332,14 +196,14 @@
 				register: register
 			};
 
-			__refs$3.set(this, refs);
+			__refs$1.set(this, refs);
 		}
 
 		_createClass(__Resolver, [{
 			key: 'add',
 			value: function add(namespace, value) {
-				var _refs$3$get = __refs$3.get(this),
-				    register = _refs$3$get.register;
+				var _refs$1$get = __refs$1.get(this),
+				    register = _refs$1$get.register;
 
 				register[namespace] = value;
 				return this;
@@ -347,8 +211,8 @@
 		}, {
 			key: 'remove',
 			value: function remove(namespace) {
-				var _refs$3$get2 = __refs$3.get(this),
-				    register = _refs$3$get2.register;
+				var _refs$1$get2 = __refs$1.get(this),
+				    register = _refs$1$get2.register;
 
 				register[namespace] = undefined;
 				delete register[namespace];
@@ -357,8 +221,8 @@
 		}, {
 			key: 'get',
 			value: function get(namespace) {
-				var _refs$3$get3 = __refs$3.get(this),
-				    register = _refs$3$get3.register;
+				var _refs$1$get3 = __refs$1.get(this),
+				    register = _refs$1$get3.register;
 
 				return register[namespace];
 			}
@@ -378,9 +242,9 @@
 		function __Actions(context) {
 			_classCallCheck(this, __Actions);
 
-			var _this4 = _possibleConstructorReturn(this, (__Actions.__proto__ || Object.getPrototypeOf(__Actions)).call(this, context));
+			var _this2 = _possibleConstructorReturn(this, (__Actions.__proto__ || Object.getPrototypeOf(__Actions)).call(this, context));
 
-			var refs = __refs$3.get(_this4),
+			var refs = __refs$1.get(_this2),
 			    register = refs.register;
 
 
@@ -390,7 +254,7 @@
 
 
 				if (actions) {
-					actions.forEach(function (Action) {
+					[].concat(actions).forEach(function (Action) {
 						var action = new Action();
 						action.context = context;
 						action.event = event;
@@ -398,13 +262,13 @@
 					});
 				}
 			};
-			return _this4;
+			return _this2;
 		}
 
 		_createClass(__Actions, [{
 			key: 'add',
 			value: function add(type, actions) {
-				var refs = __refs$3.get(this),
+				var refs = __refs$1.get(this),
 				    context = refs.context,
 				    onAction = refs.onAction,
 				    registered = this.get(type);
@@ -451,30 +315,30 @@
 		return __Actions;
 	}(__Resolver);
 
-	var Context = function (_EventEmitter3) {
-		_inherits(Context, _EventEmitter3);
+	var Context = function (_EventEmitter) {
+		_inherits(Context, _EventEmitter);
 
 		function Context() {
 			_classCallCheck(this, Context);
 
-			var _this5 = _possibleConstructorReturn(this, (Context.__proto__ || Object.getPrototypeOf(Context)).call(this));
+			var _this3 = _possibleConstructorReturn(this, (Context.__proto__ || Object.getPrototypeOf(Context)).call(this));
 
-			__refs$3.set(_this5, {
-				actions: new __Actions(_this5),
-				values: new __Resolver(_this5)
+			__refs$1.set(_this3, {
+				actions: new __Actions(_this3),
+				values: new __Resolver(_this3)
 			});
-			return _this5;
+			return _this3;
 		}
 
 		_createClass(Context, [{
 			key: 'actions',
 			get: function get() {
-				return __refs$3.get(this).actions;
+				return __refs$1.get(this).actions;
 			}
 		}, {
 			key: 'values',
 			get: function get() {
-				return __refs$3.get(this).values;
+				return __refs$1.get(this).values;
 			}
 		}]);
 
@@ -515,7 +379,7 @@
 		_createClass(Initialize, [{
 			key: 'run',
 			value: function run() {
-				var _this6 = this;
+				var _this4 = this;
 
 				var settings = __getSettings(this),
 				    context = this.context,
@@ -542,7 +406,7 @@
 					var options = _extends({ el: el, context: context }, settings.params);
 					var view = null;
 
-					result = _this6.beforeEach(options, el, index);
+					result = _this4.beforeEach(options, el, index);
 					if (__isFalse(result)) {
 						return;
 					}
@@ -550,7 +414,7 @@
 					view = new settings.view(options);
 					view.render();
 
-					result = _this6.afterEach(view, el, index);
+					result = _this4.afterEach(view, el, index);
 					if (__isFalse(result)) {
 						return;
 					}
@@ -643,11 +507,11 @@
 		}, {
 			key: '_observe',
 			value: function _observe(elements) {
-				var _this7 = this;
+				var _this5 = this;
 
 				this._observer = new window.IntersectionObserver(this._onIntersect, this.observerSettings);
 				[].concat(_toConsumableArray(elements)).forEach(function (element) {
-					return _this7._observer.observe(element);
+					return _this5._observer.observe(element);
 				});
 			}
 		}, {
@@ -659,7 +523,7 @@
 		}, {
 			key: '_fetch',
 			value: function _fetch() {
-				var _this8 = this;
+				var _this6 = this;
 
 				var event = this.event;
 
@@ -670,21 +534,21 @@
 
 					if (!Action) {
 						error = new Error('Module must export Action or default');
-						_this8.context.trigger(_this8.event.type + ':error', { error: error }); // Only for testing reasons
+						_this6.context.trigger(_this6.event.type + ':error', { error: error }); // Only for testing reasons
 						throw error;
 					}
 
 					if (!(typeof Action.prototype.run === 'function')) {
 						error = new Error('Module must be an Action');
-						_this8.context.trigger(_this8.event.type + ':error', { error: error }); // Only for testing reasons
+						_this6.context.trigger(_this6.event.type + ':error', { error: error }); // Only for testing reasons
 						throw error;
 					}
 
 					// Replace the proxy action with the loaded action
-					_this8.context.actions.add(event.type, Action).remove(event.type, _this8.constructor);
+					_this6.context.actions.add(event.type, Action).remove(event.type, _this6.constructor);
 
 					// Execute the current action:
-					_this8._execute(Action);
+					_this6._execute(Action);
 				});
 			}
 		}, {
@@ -730,18 +594,18 @@
 		return InitializeLazy;
 	}();
 
-	var View = function (_EventEmitter4) {
-		_inherits(View, _EventEmitter4);
+	var View = function (_EventEmitter2) {
+		_inherits(View, _EventEmitter2);
 
 		function View(options) {
 			_classCallCheck(this, View);
 
-			var _this9 = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this));
+			var _this7 = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this));
 
-			_this9.options = options;
-			_this9.context = options.context;
-			_this9.el = options.el;
-			return _this9;
+			_this7.options = options;
+			_this7.context = options.context;
+			_this7.el = options.el;
+			return _this7;
 		}
 
 		_createClass(View, [{
@@ -762,11 +626,9 @@
 		return View;
 	}(EventEmitter);
 
-	exports.Collection = Collection;
 	exports.Context = Context;
 	exports.EventEmitter = EventEmitter;
 	exports.Initialize = Initialize;
 	exports.InitializeLazy = InitializeLazy;
-	exports.Model = Model;
 	exports.View = View;
 });

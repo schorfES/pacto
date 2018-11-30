@@ -49,121 +49,6 @@ class EventEmitter {
 const __refs$1 = new WeakMap();
 
 
-class Model extends EventEmitter {
-
-	constructor(props = {}) {
-		super();
-		props = {...this.defaults, ...props};
-
-		const
-			handler = {
-				set: (target, property, value) => {
-					const isChanged = target[property] !== value;
-					target[property] = value;
-
-					if (isChanged) {
-						this.trigger('change', {prop: property, value: value});
-					}
-
-					return true;
-				}
-			},
-			proxy = new Proxy(props, handler)
-		;
-
-		__refs$1.set(this, proxy);
-	}
-
-	get defaults() {
-		return null;
-	}
-
-	get props() {
-		return __refs$1.get(this);
-	}
-
-}
-
-const __refs$2 = new WeakMap();
-
-
-class Collection extends EventEmitter {
-
-	constructor(models = []) {
-		super();
-
-		const
-			enshureIsModel = (model) =>
-				(model instanceof Model) ? model : new this.Model(model),
-			handler = {
-				get: (target, property) => {
-					const method = target[property];
-
-					if (typeof method === 'function') {
-						return (...args) => {
-							let
-								isChanged = false,
-								result
-							;
-
-							switch (property) {
-								case 'pop':
-								case 'reverse':
-								case 'shift':
-								case 'sort':
-									isChanged = true;
-									break;
-
-								case 'fill':
-									isChanged = true;
-									args[0] = enshureIsModel(args[0]);
-									break;
-
-								case 'push':
-								case 'unshift':
-									isChanged = true;
-									args = args.map(enshureIsModel);
-									break;
-
-								case 'splice':
-									isChanged = true;
-									args = args.map((arg, index) =>
-										(index > 1) ? enshureIsModel(arg) : arg);
-									break;
-							}
-
-							result = method.apply(target, args);
-
-							if (isChanged) {
-								this.trigger('change', {method: property});
-							}
-
-							return result;
-						};
-					}
-
-					return method;
-				}
-			},
-			proxy = new Proxy(models.map(enshureIsModel), handler)
-		;
-
-		__refs$2.set(this, proxy);
-	}
-
-	get Model() {
-		return Model;
-	}
-
-	get models() {
-		return __refs$2.get(this);
-	}
-
-}
-
-const __refs$3 = new WeakMap();
-
-
 class __Resolver {
 
 	constructor(context) {
@@ -175,24 +60,24 @@ class __Resolver {
 			}
 		;
 
-		__refs$3.set(this, refs);
+		__refs$1.set(this, refs);
 	}
 
 	add(namespace, value) {
-		const {register} = __refs$3.get(this);
+		const {register} = __refs$1.get(this);
 		register[namespace] = value;
 		return this;
 	}
 
 	remove(namespace) {
-		const {register} = __refs$3.get(this);
+		const {register} = __refs$1.get(this);
 		register[namespace] = undefined;
 		delete(register[namespace]);
 		return this;
 	}
 
 	get(namespace) {
-		const {register} = __refs$3.get(this);
+		const {register} = __refs$1.get(this);
 		return register[namespace];
 	}
 
@@ -208,7 +93,7 @@ class __Actions extends __Resolver {
 	constructor(context) {
 		super(context);
 		const
-			refs = __refs$3.get(this),
+			refs = __refs$1.get(this),
 			{register} = refs
 		;
 
@@ -219,7 +104,7 @@ class __Actions extends __Resolver {
 			;
 
 			if (actions) {
-				actions.forEach((Action) => {
+				[].concat(actions).forEach((Action) => {
 					var action = new Action();
 					action.context = context;
 					action.event = event;
@@ -231,7 +116,7 @@ class __Actions extends __Resolver {
 
 	add(type, actions) {
 		const
-			refs = __refs$3.get(this),
+			refs = __refs$1.get(this),
 			{context, onAction} = refs,
 			registered = this.get(type)
 		;
@@ -279,18 +164,18 @@ class Context extends EventEmitter {
 
 	constructor() {
 		super();
-		__refs$3.set(this, {
+		__refs$1.set(this, {
 			actions: new __Actions(this),
 			values: new __Resolver(this)
 		});
 	}
 
 	get actions() {
-		return __refs$3.get(this).actions;
+		return __refs$1.get(this).actions;
 	}
 
 	get values() {
-		return __refs$3.get(this).values;
+		return __refs$1.get(this).values;
 	}
 
 }
@@ -532,4 +417,4 @@ class View extends EventEmitter {
 
 }
 
-export { Collection, Context, EventEmitter, Initialize, InitializeLazy, Model, View };
+export { Context, EventEmitter, Initialize, InitializeLazy, View };

@@ -7,13 +7,16 @@ docs:
 
 
 validate:
-	eslint \
+	node_modules/.bin/audit-ci  \
+		--moderate
+
+	node_modules/.bin/eslint \
 		. \
 		--ext .js
 
 
 tests:
-	jest \
+	node_modules/.bin/jest \
 		src \
 		--coverage \
 		--verbose
@@ -30,6 +33,6 @@ coverage:
 build:
 	node ./build.js
 
-	jest \
+	node_modules/.bin/jest \
 		tests \
 		--verbose

@@ -15,7 +15,8 @@
     "test": "snyk test && make tests",
     "coverage": "make coverage",
     "docs": "make docs",
-    "build": "make build"
+    "build": "make build",
+    "prepare": "make build"
   },
   "repository": {
     "type": "git",

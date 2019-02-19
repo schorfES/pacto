@@ -162,12 +162,22 @@ class __Actions extends __Resolver {
 
 class Context extends EventEmitter {
 
-	constructor() {
+	constructor(options = null) {
 		super();
-		__refs$1.set(this, {
+
+		const refs = {
 			actions: new __Actions(this),
-			values: new __Resolver(this)
-		});
+			values: new __Resolver(this),
+			options
+		};
+
+		if (options && options.history) {
+			// All triggered events will be stored here until they are flushed
+			// away using flushHistroy():
+			refs.history = [];
+		}
+
+		__refs$1.set(this, refs);
 	}
 
 	get actions() {
@@ -176,6 +186,21 @@ class Context extends EventEmitter {
 
 	get values() {
 		return __refs$1.get(this).values;
+	}
+
+	get history() {
+		return __refs$1.get(this).history || null;
+	}
+
+	trigger(type, data = null) {
+		const {history} = this;
+		history && history.push({type, data});
+		return super.trigger(type, data);
+	}
+
+	flushHistory() {
+		const {history} = this;
+		history && history.splice(0, history.length);
 	}
 
 }
@@ -331,6 +356,14 @@ class InitializeLazy {
 			return;
 		}
 
+		if (document.readyState === 'complete') {
+			this._setup(elements);
+		} else {
+			window.addEventListener('load', () => this._setup(elements), {once: true});
+		}
+	}
+
+	_setup(elements) {
 		if (window.IntersectionObserver) {
 			this._observe(elements);
 		} else {
@@ -353,18 +386,13 @@ class InitializeLazy {
 
 		this.import.then((module) => {
 			const Action = module.Action || module.default;
-			let error = null;
 
 			if (!Action) {
-				error = new Error('Module must export Action or default');
-				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
-				throw error;
+				throw new Error('Module must export Action or default');
 			}
 
 			if (!(typeof Action.prototype.run === 'function')) {
-				error = new Error('Module must be an Action');
-				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
-				throw error;
+				throw new Error('Module must be an Action');
 			}
 
 			// Replace the proxy action with the loaded action
@@ -374,6 +402,10 @@ class InitializeLazy {
 
 			// Execute the current action:
 			this._execute(Action);
+		})
+		.catch((error) => {
+			this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
+			throw error;
 		});
 	}
 

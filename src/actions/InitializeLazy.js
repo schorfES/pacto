@@ -76,15 +76,11 @@ export class InitializeLazy {
 			let error = null;
 
 			if (!Action) {
-				error = new Error('Module must export Action or default');
-				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
-				throw error;
+				throw new Error('Module must export Action or default');
 			}
 
 			if (!(typeof Action.prototype.run === 'function')) {
-				error = new Error('Module must be an Action');
-				this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
-				throw error;
+				throw new Error('Module must be an Action');
 			}
 
 			// Replace the proxy action with the loaded action
@@ -94,6 +90,10 @@ export class InitializeLazy {
 
 			// Execute the current action:
 			this._execute(Action);
+		})
+		.catch((error) => {
+			this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
+			throw error;
 		});
 	}
 

@@ -62,6 +62,11 @@ describe('The context', () => {
 				expect(context.history).toEqual([]);
 			});
 
+			it('did not fail when flush disabled event-history', () => {
+				context = new Context();
+				expect(() => context.flushHistory()).not.toThrow();
+			});
+
 		});
 
 	});

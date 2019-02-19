@@ -147,6 +147,37 @@ describe('The lazy initialize action', () => {
 		expect(observers[0].observe).toHaveBeenCalledWith(elements[0]);
 	});
 
+	test('should observer elements with intersection observer only when document is loaded', () => {
+		const
+			event = document.createEvent('Event'),
+			elements = document.querySelectorAll('.module')
+		;
+
+		document.readyState = 'loading';
+		setup();
+		execute();
+
+		expect(MockIO).toHaveBeenCalledTimes(0);
+
+		document.readyState = 'complete';
+		event.initEvent('load', false, false);
+		window.dispatchEvent(event);
+
+		// Creates observers?
+		expect(MockIO).toHaveBeenCalledTimes(1);
+		expect(MockIO.mock.calls[0]).toHaveLength(2);
+		expect(MockIO.mock.calls[0][0]).toBeInstanceOf(Function);
+		expect(MockIO.mock.calls[0][1]).toEqual({
+			rootMargin: '0px',
+			threshold: [0, 0.5, 1]
+		});
+
+		// Is observed?
+		expect(observers[0].observe).toHaveBeenCalledTimes(2);
+		expect(observers[0].observe.mock.calls[0]).toEqual([elements[0]]);
+		expect(observers[0].observe.mock.calls[1]).toEqual([elements[1]]);
+	});
+
 	test('should skip when not find any elements to observe', () => {
 		setup({selector: '.foo'});
 		execute();

@@ -51,6 +51,14 @@ export class InitializeLazy {
 			return;
 		}
 
+		if (document.readyState === 'complete') {
+			this._setup(elements);
+		} else {
+			window.addEventListener('load', () => this._setup(elements), {once: true});
+		}
+	}
+
+	_setup(elements) {
 		if (window.IntersectionObserver) {
 			this._observe(elements);
 		} else {
@@ -73,7 +81,6 @@ export class InitializeLazy {
 
 		this.import.then((module) => {
 			const Action = module.Action || module.default;
-			let error = null;
 
 			if (!Action) {
 				throw new Error('Module must export Action or default');

@@ -9,6 +9,7 @@ module.exports = {
 		'src/'
 	],
 	'setupFiles': [
+		'./src/__setup__.js'
 	],
 	'testPathIgnorePatterns': [
 		'node_modules/'

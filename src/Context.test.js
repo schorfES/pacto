@@ -26,6 +26,46 @@ describe('The context', () => {
 		expect(context.values).toBeInstanceOf(Object);
 	});
 
+	describe('options', () => {
+
+		describe('.histroy', () => {
+
+			it('is disabled by default', () => {
+				expect(context.history).toBe(null);
+
+				context.trigger('test:event');
+				context.trigger('other:test:event', {foo: 'bar'});
+
+				expect(context.history).toBe(null);
+			});
+
+			it('saves event-history when enebaled', () => {
+				context = new Context({history: true});
+
+				expect(context.history).toEqual([]);
+
+				context.trigger('test:event');
+				context.trigger('other:test:event', {foo: 'bar'});
+
+				expect(context.history).toEqual([
+					{type: 'test:event', data: null},
+					{type: 'other:test:event', data: {foo: 'bar'}},
+				]);
+			});
+
+			it('can flush event-history when enabled', () => {
+				context = new Context({history: true});
+				context.trigger('test:event');
+				context.trigger('other:test:event', {foo: 'bar'});
+				context.flushHistory();
+
+				expect(context.history).toEqual([]);
+			});
+
+		});
+
+	});
+
 });
 
 

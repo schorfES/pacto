@@ -117,12 +117,22 @@ class __Actions extends __Resolver {
 
 export class Context extends EventEmitter {
 
-	constructor() {
+	constructor(options = null) {
 		super();
-		__refs.set(this, {
+
+		const refs = {
 			actions: new __Actions(this),
-			values: new __Resolver(this)
-		});
+			values: new __Resolver(this),
+			options
+		}
+
+		if (options && options.history) {
+			// All triggered events will be stored here until they are flushed
+			// away using flushHistroy():
+			refs.history = [];
+		}
+
+		__refs.set(this, refs);
 	}
 
 	get actions() {
@@ -131,6 +141,21 @@ export class Context extends EventEmitter {
 
 	get values() {
 		return __refs.get(this).values;
+	}
+
+	get history() {
+		return __refs.get(this).history || null;
+	}
+
+	trigger(type, data = null) {
+		const {history} = this;
+		history && history.push({type, data});
+		return super.trigger(type, data);
+	}
+
+	flushHistory() {
+		const {history} = this;
+		history && history.splice(0, history.length);
 	}
 
 }

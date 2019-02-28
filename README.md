@@ -151,7 +151,7 @@ class Action {
 }
 
 const context = new Context();
-context.action.add('event:type', Action);
+context.actions.add('event:type', Action);
 context.trigger('event:type', {foo: 'bar'}); // logs: 'I am an action', {context}, {event}
 ```
 
@@ -186,7 +186,7 @@ import {Context} from 'pacto';
 import {Action as MyModule} from 'mymodule/actions/Initialize';
 
 const context = new Context();
-context.action.add('app:start', [
+context.actions.add('app:start', [
 	MyModule,
 	// Add more modules here...
 ]);
@@ -252,7 +252,7 @@ import {Context} from 'pacto';
 import {Action as MyLazyModule} from 'mymodule/actions/InitializeLazy';
 
 const context = new Context();
-context.action.add('app:start', [
+context.actions.add('app:start', [
 	MyLazyModule,
 	// Add more modules here...
 ]);

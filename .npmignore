@@ -1,0 +1,15 @@
+coverage/
+docs/
+example/
+src/
+tests/
+.browserslistrc
+.editorconfig
+.eslintignore
+.eslintrc
+.nvmrc
+.travis.yml
+babel.config.js
+build.js
+jest.config.js
+Makefile

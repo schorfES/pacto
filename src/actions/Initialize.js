@@ -40,14 +40,19 @@ export class Initialize {
 			root = data && data.root ? data.root : document.body
 		;
 
-		let result;
+		let result, elements;
 
 		result = this.beforeAll();
 		if (__isFalse(result)) {
 			return;
 		}
 
-		[...root.querySelectorAll(settings.selector)].forEach((el, index) => {
+		elements = root.querySelectorAll(settings.selector);
+		if (elements.length === 0) {
+			return;
+		}
+
+		[...elements].forEach((el, index) => {
 			if (views.some((view) => view.el == el)) {
 				return;
 			}

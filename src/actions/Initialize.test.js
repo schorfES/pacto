@@ -80,6 +80,12 @@ describe('The initialize action', () => {
 		expect(execute).toThrow(new Error('Define a view'));
 	});
 
+	test('should not fail when selector returns no elements', () => {
+		setup({selector: '.module-not-defined', namespace: 'module'});
+		expect(() => execute()).not.toThrow();
+		expect(context.values.has('module')).toBeFalsy();
+	});
+
 	test('should create views in namespace', () => {
 		setup({selector: '.module', namespace: 'module', view: View});
 		execute();

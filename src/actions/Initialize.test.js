@@ -81,7 +81,7 @@ describe('The initialize action', () => {
 	});
 
 	test('should not fail when selector returns no elements', () => {
-		setup({selector: '.module-not-defined', namespace: 'module'});
+		setup({selector: '.module-not-defined', namespace: 'module', view: View});
 		expect(() => execute()).not.toThrow();
 		expect(context.values.has('module')).toBeFalsy();
 	});

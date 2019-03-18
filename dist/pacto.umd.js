@@ -366,14 +366,20 @@
             views = context.values.get(settings.namespace) || [],
             root = data && data.root ? data.root : document.body;
 
-        var result;
+        var result, elements;
         result = this.beforeAll();
 
         if (__isFalse(result)) {
           return;
         }
 
-        _toConsumableArray(root.querySelectorAll(settings.selector)).forEach(function (el, index) {
+        elements = root.querySelectorAll(settings.selector);
+
+        if (elements.length === 0) {
+          return;
+        }
+
+        _toConsumableArray(elements).forEach(function (el, index) {
           if (views.some(function (view) {
             return view.el == el;
           })) {

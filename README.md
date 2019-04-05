@@ -14,6 +14,7 @@ A lightweight framework for non SPA websites.
 - [The Concepts](#the-concepts)
 - [Installation](#installation)
 - [Requirements](#requirements)
+  - [Support NodeList.prototype.forEach](#support-nodelistprototypeforeach)
 - [Documentation](#documentation)
   - [Context](#context)
     - [Actions](#actions)

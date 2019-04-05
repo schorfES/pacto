@@ -259,7 +259,7 @@ class Initialize {
 			return;
 		}
 
-		[...elements].forEach((el, index) => {
+		elements.forEach((el, index) => {
 			if (views.some((view) => view.el == el)) {
 				return;
 			}
@@ -378,7 +378,7 @@ class InitializeLazy {
 
 	_observe(elements) {
 		this._observer = new window.IntersectionObserver(this._onIntersect, this.observerSettings);
-		[...elements].forEach((element) => this._observer.observe(element));
+		elements.forEach((element) => this._observer.observe(element));
 	}
 
 	_disconnect() {

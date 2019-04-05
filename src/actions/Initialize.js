@@ -52,7 +52,7 @@ export class Initialize {
 			return;
 		}
 
-		[...elements].forEach((el, index) => {
+		elements.forEach((el, index) => {
 			if (views.some((view) => view.el == el)) {
 				return;
 			}

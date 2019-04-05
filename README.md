@@ -96,6 +96,11 @@ polyfills before loading and running the app:
 })('/path/to/app-using-pacto.js');
 ```
 
+### Support NodeList.prototype.forEach
+
+Pacto expects the support of `NodeList.prototype.forEach`. For older Browsers such
+as IE11 you need to add another [polyfill](https://www.npmjs.com/package/nodelist-foreach-polyfill).
+
 ## Documentation
 
 ### Context

@@ -68,7 +68,7 @@ export class InitializeLazy {
 
 	_observe(elements) {
 		this._observer = new window.IntersectionObserver(this._onIntersect, this.observerSettings);
-		[...elements].forEach((element) => this._observer.observe(element));
+		elements.forEach((element) => this._observer.observe(element));
 	}
 
 	_disconnect() {

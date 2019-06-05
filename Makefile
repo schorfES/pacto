@@ -1,4 +1,4 @@
-.PHONY:  docs validate tests coverage build
+.PHONY:  docs validate tests coverage build release
 
 
 docs:

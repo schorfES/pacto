@@ -37,4 +37,5 @@ build:
 make release: validate tests build docs
 	node_modules/.bin/np \
 		--no-yarn \
+		--no-tests \
 		--tag

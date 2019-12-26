@@ -41,9 +41,9 @@
     "eslint-plugin-jest": "^21.27.2",
     "jest": "^24.1.0",
     "live-server": "^1.2.1",
+    "np": "^5.2.1",
     "rollup": "^0.57.1",
     "snyk": "^1.126.0",
-    "uglify-js": "^3.4.9",
-    "version-bump-prompt": "^5.0.0"
+    "uglify-js": "^3.4.9"
   }
 }

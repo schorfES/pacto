@@ -27,7 +27,9 @@ coverage:
 
 
 build:
-	node ./build.js
+	node_modules/.bin/rollup \
+		-c \
+		--environment INCLUDE_DEPS,BUILD:production
 
 	node_modules/.bin/jest \
 		tests \

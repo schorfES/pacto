@@ -16,9 +16,9 @@ export default [
 	{
 		input: MODULE_ENTRY,
 		output: {
-			file: './dist/pacto.umd.js',
+			file: './dist/pacto.cjs.js',
 			name: MODULE_NAME,
-			format: 'umd'
+			format: 'cjs'
 		},
 		plugins: [babel()]
 	},
@@ -27,8 +27,8 @@ export default [
 		output: {
 			file: './dist/pacto.min.js',
 			name: MODULE_NAME,
-			format: 'umd'
+			format: 'iife'
 		},
 		plugins: [babel(), terser()]
-	}
+	},
 ];

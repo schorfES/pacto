@@ -1,6 +1,5 @@
 coverage/
 docs/
-example/
 src/
 tests/
 .browserslistrc
@@ -10,6 +9,6 @@ tests/
 .nvmrc
 .travis.yml
 babel.config.js
-build.js
 jest.config.js
+rollup.config.js
 Makefile

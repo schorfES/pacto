@@ -31,7 +31,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.9.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
-    "audit-ci": "^2.5.1",
+    "audit-ci": "^3.0.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.2.6",
     "babel-plugin-dynamic-import-node": "^2.3.0",

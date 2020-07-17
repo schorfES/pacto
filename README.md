@@ -123,13 +123,13 @@ context
 
 The context can store the event-histroy. This allows modules to load lazy and
 react on previous events from history, if required. The history is disabled by
-default. To enable this feature pass `{histroy: true}` into the constructor. The
+default. To enable this feature pass `{history: true}` into the constructor. The
 history can be flushed.
 
 ```javascript
 import {Context} from 'pacto';
 
-const context = new Context();
+const context = new Context({history: true});
 context.trigger('event:type');
 context.trigger('event:type', {foo: 'bar'});
 context.histroy; // logs: [{type: 'event:type', data: null}, {type: 'event:type', data {foo: 'bar'}}]

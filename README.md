@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/schorfES/pacto.svg?branch=master)](https://travis-ci.org/schorfES/pacto)
 [![Coverage Status on Codecov](https://codecov.io/gh/schorfES/pacto/branch/master/graph/badge.svg)](https://codecov.io/gh/schorfES/pacto)
 [![Known Vulnerabilities](https://snyk.io/test/github/schorfES/pacto/badge.svg)](https://snyk.io/test/github/schorfES/pacto)
+[![Minified gzipped size](https://badgen.net/bundlephobia/minzip/pacto)](https://bundlephobia.com/result?p=pacto)
 
 A lightweight framework for non SPA websites.
 

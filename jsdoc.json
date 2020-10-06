@@ -1,0 +1,21 @@
+{
+  "source": {
+    "include": ["./src"],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules|docs|__setup__|__fixtures__|.test.js)"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "encoding": "utf8",
+    "destination": "web/",
+    "readme": "README.md",
+    "recurse": true,
+    "verbose": true,
+    "template": "./node_modules/@pixi/jsdoc-template"
+  },
+  "templates": {
+    "applicationName": "Pacto"
+  }
+}

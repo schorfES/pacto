@@ -38,6 +38,7 @@
     "eslint": "^7.4.0",
     "eslint-plugin-jest": "^24.0.2",
     "jest": "^27.0.6",
+    "jsdoc": "^3.6.6",
     "np": "^7.0.0",
     "rollup": "^2.3.3",
     "rollup-plugin-babel": "^4.4.0",

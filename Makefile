@@ -5,6 +5,10 @@ docs:
 	node_modules/.bin/doctoc \
 		./README.md
 
+	node_modules/.bin/jsdoc \
+		--configure ./jsdoc.json \
+		--verbose
+
 
 audit:
 	# ignoring 1700 doctoc>...>trim (https://github.com/thlorenz/doctoc/pull/202)

@@ -4,6 +4,12 @@ import {EventEmitter} from './EventEmitter';
 const __refs = new WeakMap();
 
 
+/**
+ * A resolver.
+ *
+ * @private
+ * @type {Resolver}
+ */
 class __Resolver {
 
 	constructor(context) {
@@ -43,6 +49,13 @@ class __Resolver {
 }
 
 
+/**
+ * A resolver for actions.
+ *
+ * @private
+ * @type {Actions}
+ * @extends {Resolver}
+ */
 class __Actions extends __Resolver {
 
 	constructor(context) {
@@ -114,9 +127,23 @@ class __Actions extends __Resolver {
 
 }
 
-
+// @TODO: Document
+/**
+ * The main hub for events and actions. It's also a key value store.
+ *
+ * @public
+ * @type {Context}
+ * @extends {EventEmitter}
+ */
 export class Context extends EventEmitter {
 
+	// @TODO: Document
+	/**
+	 * Constructor
+	 *
+	 * @param {Object} options [options=null] the options for the context instance
+	 * @param {boolean} options.history enables the event history
+	 */
 	constructor(options = null) {
 		super();
 
@@ -135,6 +162,11 @@ export class Context extends EventEmitter {
 		__refs.set(this, refs);
 	}
 
+	/**
+	 * Retuns the actions instance.
+	 *
+	 * @return {Actions}
+	 */
 	get actions() {
 		return __refs.get(this).actions;
 	}

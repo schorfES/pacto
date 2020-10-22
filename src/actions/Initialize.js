@@ -25,12 +25,48 @@ function __getSettings(instance) {
 }
 
 
+/**
+ * A basic initialize action to execute a module that is related to a single or
+ * multiple DOM elements. Once a matching element is found, this action creates
+ * an instance of the pre-configured view and passes the reference into the view.
+ * The view gets rendered by this action using the <code>render()</code> method.
+ *
+ * Extend from this class to create an initialize action.
+ *
+ * @public
+ * @type {InitializeLazy}
+ */
 export class Initialize {
 
+	/**
+	 * Implement this abstract getter to setup the instance of this action. The
+	 * getter needs to return an object with the properties <code>selector</code>,
+	 * <code>namespace</code> and <code>view</code>.
+	 *
+	 * The <code>selector</code> needs to be a valid a valid document query
+	 * selector string. The Property <code>namespace</code> defines the key
+	 * thats used to store the created views in the <code>.values</code> instance
+	 * of the context. That allows to receive all references of the created views.
+	 * <code>view</code> defines the view class that should be used.
+	 *
+	 * @abstract
+	 * @return {Object} the settings object
+	 */
 	get settings() {
 		return null;
 	}
 
+	/**
+	 * Executes the action. This run function is not ment to be executed directly.
+	 * An instance of this action will be created by pacto and this function will
+	 * be called to execute this action.
+	 *
+	 * @private
+	 * @throws if the settings getter is not implemented
+	 * @throws if the settings getter doesn't return a selector
+	 * @throws if the settings getter doesn't return a namespace
+	 * @throws if the settings getter doesn't return a view class
+	 */
 	run() {
 		const
 			settings = __getSettings(this),
@@ -83,18 +119,53 @@ export class Initialize {
 		this.afterAll(views);
 	}
 
+	/**
+	 * A hook that is called before the first view will be created.
+	 *
+	 * @abstract
+	 * @return {undefined|boolean} return <code>false</code> to stop further execution.
+	 */
 	beforeAll() {
 		// Overwrite this...
 	}
 
+	/**
+	 * A hook that is called before a new view will be created.
+	 *
+	 * @abstract
+	 * @param {Object} options the options that will be passed into the view.
+	 * @param {Element} el the DOM element the view will be attached to.
+	 * @param {number} index the index of the current element in the list of
+	 * 		matching elements.
+	 * @return {undefined|boolean} return <code>false</code> to stop further
+	 * 		execution for this element/view.
+	 */
 	beforeEach(/* options, el, index */) {
 		// Overwrite this...
 	}
 
+	/**
+	 * A hook that is called after a new view will be created.
+	 *
+	 * @abstract
+	 * @param {Object} options the options that will be passed into the view.
+	 * @param {Element} el the DOM element the view will be attached to.
+	 * @param {number} index the index of the current element in the list of
+	 * 		matching elements.
+	 * @return {undefined|boolean} return <code>false</code> to stop further
+	 * 		execution for this element/view, the previously created view will
+	 * 		not be added into the values store of the context.
+	 */
 	afterEach(/* view, el, index */) {
 		// Overwrite this...
 	}
 
+	/**
+	 * A hook that is called after all views where created.
+	 *
+	 * @abstract
+	 * @param {Array} views the list of created views
+	 */
 	afterAll(/* views */) {
 		// Overwrite this...
 	}

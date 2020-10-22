@@ -1,6 +1,13 @@
 import {EventEmitter} from './EventEmitter';
 
 
+// @TODO: Document
+/**
+ * The view.
+ *
+ * @public
+ * @type {View}
+ */
 export class View extends EventEmitter {
 
 	constructor(options) {

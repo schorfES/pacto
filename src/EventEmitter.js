@@ -1,6 +1,13 @@
 const __refs = new WeakMap();
 
 
+// @TODO: Document
+/**
+ * The event emitter class.
+ *
+ * @public
+ * @type {EventEmitter}
+ */
 export class EventEmitter {
 
 	constructor() {

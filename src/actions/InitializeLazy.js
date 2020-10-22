@@ -21,20 +21,60 @@ function __error(action, error) {
 }
 
 
+/**
+ * A basic lazy initialize action. Extend from this class to create a lazy
+ * initialize action for a module that should initialize once a DOM element is
+ * visible for the user. This implementation uses an intersection observer to
+ * detect the visibility of of an element.
+ *
+ * @public
+ * @type {InitializeLazy}
+ */
 export class InitializeLazy {
 
+	/**
+	 * Constructor. Do not call this directly. An instance of an action will be
+	 * created by pacto.
+	 *
+	 * @private
+	 */
 	constructor() {
 		this._onIntersect = this._onIntersect.bind(this);
 	}
 
+	/**
+	 * Implement this abstract getter to setup the instance of this action. The
+	 * getter needs to return an object with the property <code>selector</code>.
+	 *
+	 * The <code>selector</code> needs to be a valid a valid document query
+	 * selector string.
+	 *
+	 * @abstract
+	 * @return {Object} the settings object
+	 */
 	get settings() {
 		return null;
 	}
 
+	/**
+	 * Implement this abstract getter to return a dynamic import. Reference the
+	 * initialize action of the same module here. This allows to create chunks
+	 * during a build process and separates the main bundle from the module chunk.
+	 *
+	 * @abstract
+	 * @return {Promise} the promise of an import() call
+	 */
 	get import() {
 		return null;
 	}
 
+	/**
+	 * Implement a condition that controls the execution by resolving the returned
+	 * promise. By default, this condition is based on the document.readyState
+	 * and/or the DOMContentLoaded event.
+	 *
+	 * @return {Promise} the promise to be resolved when the condition applies
+	 */
 	get condition() {
 		if (document.readyState === 'complete') {
 			return Promise.resolve();
@@ -44,6 +84,20 @@ export class InitializeLazy {
 			window.addEventListener('DOMContentLoaded', resolve, {once: true}));
 	}
 
+	/**
+	 * Returns the settings/options/properties for the intersection observer that
+	 * is used to detect the visibility of the relevant DOM elements for this
+	 * module. Default values are:
+	 * <pre>
+	 * {
+	 *   rootMargin: '0px',
+	 *   threshold: [0, 0.5, 1]
+	 * }
+	 * </pre>
+	 *
+	 * @link https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#Properties
+	 * @return {Object} the observer settings
+	 */
 	get observerSettings() {
 		return {
 			rootMargin: '0px',
@@ -51,6 +105,16 @@ export class InitializeLazy {
 		};
 	}
 
+	/**
+	 * Executes the action. This run function is not ment to be executed directly.
+	 * An instance of this action will be created by pacto and this function will
+	 * be called to execute this action.
+	 *
+	 * @private
+	 * @throws if the settings getter is not implemented
+	 * @throws if the settings getter doesn't return a selector
+	 * @throws if the import getter is not implemented
+	 */
 	run() {
 		const {selector} = __getSettings(this);
 		const { condition } = this;

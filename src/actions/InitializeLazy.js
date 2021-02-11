@@ -99,7 +99,7 @@ export class InitializeLazy {
 			this._execute(Action);
 		})
 		.catch((error) => {
-			this.context.trigger(this.event.type + ':error', {error}); // Only for testing reasons
+			this.context.trigger(this.event.type + ':error', {error});
 			throw error;
 		});
 	}

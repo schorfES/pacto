@@ -27,6 +27,9 @@ coverage:
 
 
 build:
+	node_modules/.bin/browserslist \
+		--update-db
+
 	node_modules/.bin/rollup \
 		-c \
 		--environment INCLUDE_DEPS,BUILD:production

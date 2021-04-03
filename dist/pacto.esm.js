@@ -1,14 +1,14 @@
-const __refs = new WeakMap();
+const __refs$1 = new WeakMap();
 
 
 class EventEmitter {
 
 	constructor() {
-		__refs.set(this, {});
+		__refs$1.set(this, {});
 	}
 
 	on(type, callback) {
-		const refs = __refs.get(this);
+		const refs = __refs$1.get(this);
 
 		refs[type] = refs[type] || [];
 		refs[type].push(callback);
@@ -17,7 +17,7 @@ class EventEmitter {
 	}
 
 	off(type, callback) {
-		const refs = __refs.get(this);
+		const refs = __refs$1.get(this);
 
 		if (!refs[type]) {
 			return this;
@@ -33,7 +33,7 @@ class EventEmitter {
 	}
 
 	trigger(type, data = null) {
-		const refs = __refs.get(this);
+		const refs = __refs$1.get(this);
 
 		refs[type] && refs[type].forEach((callback) => callback.call(null, {
 			sender: this,
@@ -46,7 +46,7 @@ class EventEmitter {
 
 }
 
-const __refs$1 = new WeakMap();
+const __refs = new WeakMap();
 
 
 class __Resolver {
@@ -60,24 +60,24 @@ class __Resolver {
 			}
 		;
 
-		__refs$1.set(this, refs);
+		__refs.set(this, refs);
 	}
 
 	add(namespace, value) {
-		const {register} = __refs$1.get(this);
+		const {register} = __refs.get(this);
 		register[namespace] = value;
 		return this;
 	}
 
 	remove(namespace) {
-		const {register} = __refs$1.get(this);
+		const {register} = __refs.get(this);
 		register[namespace] = undefined;
 		delete(register[namespace]);
 		return this;
 	}
 
 	get(namespace) {
-		const {register} = __refs$1.get(this);
+		const {register} = __refs.get(this);
 		return register[namespace];
 	}
 
@@ -93,7 +93,7 @@ class __Actions extends __Resolver {
 	constructor(context) {
 		super(context);
 		const
-			refs = __refs$1.get(this),
+			refs = __refs.get(this),
 			{register} = refs
 		;
 
@@ -116,7 +116,7 @@ class __Actions extends __Resolver {
 
 	add(type, actions) {
 		const
-			refs = __refs$1.get(this),
+			refs = __refs.get(this),
 			{context, onAction} = refs,
 			registered = this.get(type)
 		;
@@ -177,19 +177,19 @@ class Context extends EventEmitter {
 			refs.history = [];
 		}
 
-		__refs$1.set(this, refs);
+		__refs.set(this, refs);
 	}
 
 	get actions() {
-		return __refs$1.get(this).actions;
+		return __refs.get(this).actions;
 	}
 
 	get values() {
-		return __refs$1.get(this).values;
+		return __refs.get(this).values;
 	}
 
 	get history() {
-		return __refs$1.get(this).history || null;
+		return __refs.get(this).history || null;
 	}
 
 	trigger(type, data = null) {
@@ -209,7 +209,7 @@ function __isFalse(value) {
 	return typeof value === 'boolean' && !value;
 }
 
-function __getSettings(instance) {
+function __getSettings$1(instance) {
 	const settings = instance.settings;
 
 	if (!settings || typeof settings !== 'object') {
@@ -240,7 +240,7 @@ class Initialize {
 
 	run() {
 		const
-			settings = __getSettings(this),
+			settings = __getSettings$1(this),
 			{context, event} = this,
 			{data} = event,
 			views = context.values.get(settings.namespace) || [],
@@ -308,7 +308,7 @@ class Initialize {
 
 }
 
-function __getSettings$1(instance) {
+function __getSettings(instance) {
 	const settings = instance.settings;
 
 	if (!settings || typeof settings !== 'object') {
@@ -345,7 +345,7 @@ class InitializeLazy {
 	}
 
 	run() {
-		const settings = __getSettings$1(this);
+		const settings = __getSettings(this);
 		this._lookup(settings.selector);
 	}
 

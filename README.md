@@ -20,6 +20,7 @@ A lightweight framework for non SPA websites.
     - [Actions](#actions)
       - [Initialize](#initialize)
       - [InitializeLazy](#initializelazy)
+      - [Handling Errors](#handling-errors)
     - [Values](#values)
   - [View](#view)
   - [EventEmitter](#eventemitter)
@@ -265,29 +266,21 @@ context.actions.add('app:start', [
 context.trigger('app:start');
 ```
 
-###### Handling ChunkLoadErrors
+##### Handling Errors
 
-Note that due to caching a previous version of your core app bundle it might happen
-that a chunk load error occurs _if you redeploy a newer version with different
-chunk hashes_ in the meantime. Either disable caching of your core app bundle
-(to automatically point to the latest chunks) or handle missing chunks manually
-by listening to your event followed by `:error`, so in this case `app:start:error`
-will be emitted if a chunk load error was thrown.
+Note that due to various reasons there could be an error during the
+execution of your actions. To be able to catch these you can listen
+for `<action-id>:error` to get notified when an error occurs.
 
-So in our `App.js` we can add this error handler to get notified:
+So in our `App.js` we can add the `app:start:error` handler to get notified:
 
 ```javascript
 context.on('app:start:error', (event) => {
 	const {error} = event.data;
 
-	alert('An error while loading the App occured.. ' + error.message);
-
-	// Invalidate the cache here,
-	// report the error to e.g. sentry,
-	// or render an error boundary etc.
+	alert('An error while initializing the App occured.. ' + error.message);
 });
 ```
-
 
 #### Values
 

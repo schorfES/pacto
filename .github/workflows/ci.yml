@@ -47,3 +47,8 @@ jobs:
         run: make validate
         env:
           CI: true
+
+      - name: Run audits
+        run: make audit
+        env:
+          CI: true

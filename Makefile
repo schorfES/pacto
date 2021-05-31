@@ -1,4 +1,4 @@
-.PHONY:  docs validate tests coverage build release
+.PHONY:  docs audit validate tests coverage build release
 
 
 docs:
@@ -6,10 +6,12 @@ docs:
 		./README.md
 
 
-validate:
+audit:
 	node_modules/.bin/audit-ci  \
 		--moderate
 
+
+validate:
 	node_modules/.bin/eslint \
 		. \
 		--ext .js

@@ -7,11 +7,9 @@ docs:
 
 
 audit:
-	# ignoring 1674 doctoc>underscore (https://github.com/thlorenz/doctoc/pull/201)
 	# ignoring 1700 doctoc>...>trim (https://github.com/thlorenz/doctoc/pull/202)
 	node_modules/.bin/audit-ci  \
 		--moderate \
-		--allowlist 1674 \
 		--allowlist 1700
 
 

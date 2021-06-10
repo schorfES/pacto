@@ -8,9 +8,11 @@ docs:
 
 audit:
 	# ignoring 1700 doctoc>...>trim (https://github.com/thlorenz/doctoc/pull/202)
+	# ignoring 1751 live-server>...>glob-parent (https://www.npmjs.com/advisories/1751)
 	node_modules/.bin/audit-ci  \
 		--moderate \
-		--allowlist 1700
+		--allowlist 1700 \
+		--allowlist 1751
 
 
 validate:

@@ -243,6 +243,9 @@ describe('The lazy initialize action', () => {
 	});
 
 	test('should log error when import action with incorrect module export', async () => {
+		const consoleError = global.console.error;
+		global.console.error = jest.fn();
+
 		const callback = jest.fn();
 		context.on(EVENT_NAME + ':error', callback);
 
@@ -253,15 +256,23 @@ describe('The lazy initialize action', () => {
 		intersect();
 		await flushPromises();
 
+		expect(global.console.error).toHaveBeenCalledTimes(1);
+		expect(global.console.error).toHaveBeenCalledWith('[InitializeLazy] Module must export Action or default');
+
 		expect(callback).toHaveBeenCalledTimes(1);
 		expect(callback).toHaveBeenCalledWith(expect.objectContaining({
 			data: {
 				error: new Error('Module must export Action or default'),
 			},
 		}));
+
+		global.console.error = consoleError;
 	});
 
 	test('should fail when import class with no run() method', async () => {
+		const consoleError = global.console.error;
+		global.console.error = jest.fn();
+
 		const callback = jest.fn();
 		context.on(EVENT_NAME + ':error', callback);
 
@@ -272,12 +283,17 @@ describe('The lazy initialize action', () => {
 		intersect();
 		await flushPromises();
 
+		expect(global.console.error).toHaveBeenCalledTimes(1);
+		expect(global.console.error).toHaveBeenCalledWith('[InitializeLazy] Module must be an Action');
+
 		expect(callback).toHaveBeenCalledTimes(1);
 		expect(callback).toHaveBeenCalledWith(expect.objectContaining({
 			data: {
 				error: new Error('Module must be an Action'),
 			},
 		}));
+
+		global.console.error = consoleError;
 	});
 
 	test('should import replace action in context with imported action', async () => {

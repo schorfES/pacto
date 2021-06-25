@@ -12,6 +12,14 @@ function __getSettings(instance) {
 	return settings;
 }
 
+function __error(action, error) {
+	window.console &&
+	window.console.error &&
+	window.console.error('[InitializeLazy] ' + error.message);
+
+	action.context.trigger(action.event.type + ':error', {error});
+}
+
 
 export class InitializeLazy {
 
@@ -53,13 +61,7 @@ export class InitializeLazy {
 
 		condition
 			.then(() => this._lookup(selector))
-			.catch((error) => {
-				window.console &&
-				window.console.error &&
-				window.console.error('[InitializeLazy] ' + error.message);
-
-				this.context.trigger(this.event.type + ':error', {error});
-			});
+			.catch((error) => __error(this, error));
 	}
 
 	_lookup(selector) {
@@ -115,10 +117,7 @@ export class InitializeLazy {
 			// Execute the current action:
 			this._execute(Action);
 		})
-		.catch((error) => {
-			this.context.trigger(this.event.type + ':error', {error});
-			throw error;
-		});
+		.catch((error) => __error(this, error));
 	}
 
 	_execute(Action) {

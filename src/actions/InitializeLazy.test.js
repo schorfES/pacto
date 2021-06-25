@@ -4,6 +4,8 @@ import {Context} from '../Context';
 import {InitializeLazy} from './InitializeLazy';
 
 
+const flushPromises = () => new Promise(setImmediate);
+
 describe('The lazy initialize action', () => {
 
 	const
@@ -31,7 +33,7 @@ describe('The lazy initialize action', () => {
 	let context, observers;
 
 
-	function setup(settings = SETTINGS, path = PATH_NAMED_MODULE) {
+	function setup(settings = SETTINGS, path = PATH_NAMED_MODULE, addToContext = true) {
 		class Action extends InitializeLazy {
 			get settings() {
 				return settings;
@@ -42,7 +44,10 @@ describe('The lazy initialize action', () => {
 			}
 		}
 
-		context.actions.add(EVENT_NAME, Action);
+		if (addToContext) {
+			context.actions.add(EVENT_NAME, Action);
+		}
+
 		return Action;
 	}
 
@@ -114,10 +119,11 @@ describe('The lazy initialize action', () => {
 		expect(execute).toThrow(new Error('Define a selector'));
 	});
 
-	test('should observe elements with intersection observer', () => {
+	test('should observe elements with intersection observer', async () => {
 		const elements = document.querySelectorAll('.module');
 		setup();
 		execute();
+		await flushPromises();
 
 		// Creates observers?
 		expect(MockIO).toHaveBeenCalledTimes(1);
@@ -134,20 +140,21 @@ describe('The lazy initialize action', () => {
 		expect(observers[0].observe.mock.calls[1]).toEqual([elements[1]]);
 	});
 
-	test('should observe elements with intersection observer depending on root', () => {
+	test('should observe elements with intersection observer depending on root', async () => {
 		const
 			elements = document.querySelectorAll('.wrapper .module'),
 			root = document.querySelectorAll('.wrapper')[0]
 		;
 		setup();
 		execute(null, {root});
+		await flushPromises();
 
 		expect(MockIO).toHaveBeenCalledTimes(1);
 		expect(observers[0].observe).toHaveBeenCalledTimes(1);
 		expect(observers[0].observe).toHaveBeenCalledWith(elements[0]);
 	});
 
-	test('should observer elements with intersection observer only when document is loaded', () => {
+	test('should observe elements with intersection observer only when document is loaded', async () => {
 		const
 			event = document.createEvent('Event'),
 			elements = document.querySelectorAll('.module')
@@ -156,12 +163,14 @@ describe('The lazy initialize action', () => {
 		document.readyState = 'loading';
 		setup();
 		execute();
+		await flushPromises();
 
 		expect(MockIO).toHaveBeenCalledTimes(0);
 
 		document.readyState = 'complete';
-		event.initEvent('load', false, false);
+		event.initEvent('DOMContentLoaded', false, false);
 		window.dispatchEvent(event);
+		await flushPromises();
 
 		// Creates observers?
 		expect(MockIO).toHaveBeenCalledTimes(1);
@@ -178,16 +187,21 @@ describe('The lazy initialize action', () => {
 		expect(observers[0].observe.mock.calls[1]).toEqual([elements[1]]);
 	});
 
-	test('should skip when not find any elements to observe', () => {
+	test('should skip when not find any elements to observe', async () => {
 		setup({selector: '.foo'});
 		execute();
+		await flushPromises();
+
 		expect(MockIO).not.toHaveBeenCalled();
 	});
 
-	test('should not import and execute action when no element is intersecting', () => {
+	test('should not import and execute action when no element is intersecting', async () => {
 		setup();
 		execute();
+		await flushPromises();
+
 		expect(context.values.has('module')).not.toBeTruthy();
+
 		intersect([
 			{isIntersecting: false},
 			{isIntersecting: false},
@@ -196,94 +210,181 @@ describe('The lazy initialize action', () => {
 		expect(context.values.has('module')).not.toBeTruthy();
 	});
 
-	test('should import and execute named module action when at least one element is intersecting', (done) => {
+	test('should import and execute named module action when at least one element is intersecting', async () => {
 		setup();
-		execute(() => {
-			expect(context.values.get('module')).toHaveLength(1);
-			expect(context.values.get('module')[0]).toBeInstanceOf(ActionNamed);
-			done();
-		});
+		execute();
+		await flushPromises();
+
 		intersect([
 			{isIntersecting: false},
 			{isIntersecting: true},
 			{isIntersecting: false}
 		]);
+
+		await flushPromises();
+		expect(context.values.get('module')).toHaveLength(1);
+		expect(context.values.get('module')[0]).toBeInstanceOf(ActionNamed);
 	});
 
-	test('should import and execute default module action when at least one element is intersecting', (done) => {
+	test('should import and execute default module action when at least one element is intersecting', async () => {
 		setup(SETTINGS, PATH_DEFAULT_MODULE);
-		execute(() => {
-			expect(context.values.get('module')).toHaveLength(1);
-			expect(context.values.get('module')[0]).toBeInstanceOf(ActionDefault);
-			done();
-		});
+		execute();
+		await flushPromises();
+
 		intersect([
 			{isIntersecting: false},
 			{isIntersecting: false},
 			{isIntersecting: true}
 		]);
+
+		await flushPromises();
+		expect(context.values.get('module')).toHaveLength(1);
+		expect(context.values.get('module')[0]).toBeInstanceOf(ActionDefault);
 	});
 
-	test('should fail when import action with incorrect module export', (done) => {
-		// @TODO: UnhandledPromiseRejectionWarning: Unhandled promise rejection.
-		// This error originated either by throwing inside of an async function
-		// without a catch block, or by rejecting a promise which was not
-		// handled with .catch().
-		context.on(EVENT_NAME + ':error', (event) => {
-			expect(event.data.error).toEqual(new Error('Module must export Action or default'));
-			done();
-		});
+	test('should log error when import action with incorrect module export', async () => {
+		const callback = jest.fn();
+		context.on(EVENT_NAME + ':error', callback);
+
 		setup(SETTINGS, PATH_INCORRECT_MODULE);
 		execute();
+		await flushPromises();
+
 		intersect();
+		await flushPromises();
+
+		expect(callback).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledWith(expect.objectContaining({
+			data: {
+				error: new Error('Module must export Action or default'),
+			},
+		}));
 	});
 
-	test('should fail when import class with no run() method', (done) => {
-		// @TODO: UnhandledPromiseRejectionWarning: Unhandled promise rejection.
-		// This error originated either by throwing inside of an async function
-		// without a catch block, or by rejecting a promise which was not
-		// handled with .catch().
-		context.on(EVENT_NAME + ':error', (event) => {
-			expect(event.data.error).toEqual(new Error('Module must be an Action'));
-			done();
-		});
+	test('should fail when import class with no run() method', async () => {
+		const callback = jest.fn();
+		context.on(EVENT_NAME + ':error', callback);
+
 		setup(SETTINGS, PATH_NOT_AN_ACTION);
 		execute();
+		await flushPromises();
+
 		intersect();
+		await flushPromises();
+
+		expect(callback).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledWith(expect.objectContaining({
+			data: {
+				error: new Error('Module must be an Action'),
+			},
+		}));
 	});
 
-	test('should import replace action in context with imported action', (done) => {
+	test('should import replace action in context with imported action', async () => {
 		const Action = setup();
 		expect(context.actions.get(EVENT_NAME)).toHaveLength(1);
 		expect(context.actions.get(EVENT_NAME)[0]).toBe(Action);
 
-		execute(() => {
-			expect(context.actions.get(EVENT_NAME)).toHaveLength(1);
-			expect(context.actions.get(EVENT_NAME)[0]).toBe(ActionNamed);
-			done();
-		});
+		execute();
+		await flushPromises();
+
 		intersect();
+		await flushPromises();
+
+		expect(context.actions.get(EVENT_NAME)).toHaveLength(1);
+		expect(context.actions.get(EVENT_NAME)[0]).toBe(ActionNamed);
 	});
 
-	test('should disconnect observers until first intersect', (done) => {
+	test('should disconnect observers until first intersect', async () => {
 		setup();
-		execute(() => {
-			expect(observers[0].disconnect).toHaveBeenCalledTimes(1);
-			expect(observers[0].disconnect).toHaveBeenCalledWith();
-			done();
-		});
+		execute();
+		await flushPromises();
+
 		intersect();
+		await flushPromises();
+
+		expect(observers[0].disconnect).toHaveBeenCalledTimes(1);
+		expect(observers[0].disconnect).toHaveBeenCalledWith();
 	});
 
-	test('should import module immediately when intersection observer is not supported', (done) => {
+	test('should import module immediately when intersection observer is not supported', async () => {
 		window.IntersectionObserver = undefined;
 		delete(window.IntersectionObserver);
 
 		setup();
-		execute(() => {
-			expect(MockIO).toHaveBeenCalledTimes(0);
-			done();
-		});
+		execute();
+		await flushPromises();
+
+		expect(MockIO).toHaveBeenCalledTimes(0);
+	});
+
+	test('should use custom condition', async () => {
+		const Action = setup(SETTINGS, PATH_NAMED_MODULE, false);
+		let resolveCallback;
+		class CustomConditionAction extends Action {
+			get condition() {
+				return new Promise((resolve) => {
+					resolveCallback = resolve;
+				});
+			}
+		}
+
+		context.actions.add(EVENT_NAME, CustomConditionAction);
+		execute();
+		await flushPromises();
+
+		// Not called yet?
+		expect(MockIO).not.toHaveBeenCalled();
+
+		// Called now?
+		resolveCallback();
+		await flushPromises();
+		expect(MockIO).toHaveBeenCalledTimes(1);
+	});
+
+	test('should handle a rejected condition', async () => {
+		const consoleError = global.console.error;
+		global.console.error = jest.fn();
+
+		const callback = jest.fn();
+		context.on(EVENT_NAME + ':error', callback);
+
+		const Action = setup(SETTINGS, PATH_NAMED_MODULE, false);
+		class CustomConditionAction extends Action {
+			get condition() {
+				return Promise.reject(new Error('This is rejected'));
+			}
+		}
+
+		context.actions.add(EVENT_NAME, CustomConditionAction);
+		execute();
+		await flushPromises();
+
+		expect(MockIO).not.toHaveBeenCalled();
+
+		expect(global.console.error).toHaveBeenCalledTimes(1);
+		expect(global.console.error).toHaveBeenCalledWith('[InitializeLazy] This is rejected');
+
+		expect(callback).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledWith(expect.objectContaining({
+			data: {
+				error: new Error('This is rejected'),
+			},
+		}));
+
+		global.console.error = consoleError;
+	});
+
+	test('should thrown an error when condition is not a promise', async () => {
+		const Action = setup(SETTINGS, PATH_NAMED_MODULE, false);
+		class CustomConditionAction extends Action {
+			get condition() {
+				return true;
+			}
+		}
+
+		context.actions.add(EVENT_NAME, CustomConditionAction);
+		expect(execute).toThrow(new Error('A conditon must be an instance of promise.'));
 	});
 
 });

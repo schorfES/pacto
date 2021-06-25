@@ -266,6 +266,11 @@ context.actions.add('app:start', [
 context.trigger('app:start');
 ```
 
+The InitializeLazy action has a getter `condition` that returns a promise. It
+allows customizing the load condition when executing the startup (lookup for
+matching elements) process. The default implementation waits for the DOM-ready
+state to be "complete" (using the `DOMContentLoaded` event to wait for).
+
 ##### Handling Errors
 
 Note that due to various reasons there could be an error during the

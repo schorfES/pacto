@@ -322,6 +322,14 @@ function __getSettings(instance) {
 	return settings;
 }
 
+function __error(action, error) {
+	window.console &&
+	window.console.error &&
+	window.console.error('[InitializeLazy] ' + error.message);
+
+	action.context.trigger(action.event.type + ':error', {error});
+}
+
 
 class InitializeLazy {
 
@@ -337,6 +345,15 @@ class InitializeLazy {
 		return null;
 	}
 
+	get condition() {
+		if (document.readyState === 'complete') {
+			return Promise.resolve();
+		}
+
+		return new Promise((resolve) =>
+			window.addEventListener('DOMContentLoaded', resolve, {once: true}));
+	}
+
 	get observerSettings() {
 		return {
 			rootMargin: '0px',
@@ -345,27 +362,29 @@ class InitializeLazy {
 	}
 
 	run() {
-		const settings = __getSettings(this);
-		this._lookup(settings.selector);
+		const {selector} = __getSettings(this);
+		const { condition } = this;
+
+		if (!(condition instanceof Promise)) {
+			throw new Error('A conditon must be an instance of promise.')
+		}
+
+		condition
+			.then(() => this._lookup(selector))
+			.catch((error) => __error(this, error));
 	}
 
 	_lookup(selector) {
-		const
-			{event} = this,
-			{data} = event,
-			root = data && data.root ? data.root : document.body,
-			elements = root.querySelectorAll(selector)
-		;
+		const {event} = this;
+		const {data} = event;
+		const root = data && data.root ? data.root : document.body;
+		const elements = root.querySelectorAll(selector);
 
 		if (elements.length === 0) {
 			return;
 		}
 
-		if (document.readyState === 'complete') {
-			this._setup(elements);
-		} else {
-			window.addEventListener('load', () => this._setup(elements), {once: true});
-		}
+		this._setup(elements);
 	}
 
 	_setup(elements) {
@@ -408,10 +427,7 @@ class InitializeLazy {
 			// Execute the current action:
 			this._execute(Action);
 		})
-		.catch((error) => {
-			this.context.trigger(this.event.type + ':error', {error});
-			throw error;
-		});
+		.catch((error) => __error(this, error));
 	}
 
 	_execute(Action) {

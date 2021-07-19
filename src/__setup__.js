@@ -1,3 +1,5 @@
+import 'setimmediate';
+
 let __documentReadyState = 'complete';
 
 Object.defineProperty(document, 'readyState', {

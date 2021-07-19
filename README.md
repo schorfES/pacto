@@ -270,6 +270,15 @@ context.actions.add('app:start', [
 context.trigger('app:start');
 ```
 
+##### Define a root element
+
+Both actions, [`Initialize`](#initialize) and [`InitializeLazy`](#initializelazy) takes care of an event property `root`. If not defined, they use the document body to look up for modules by the given selector. When passing a DOM element as root by triggering an event from the context, this element is used to look up child modules. This is useful when a specific section needs to be re-initialized.
+
+```javascript
+const root = document.querySelector('.fetched-content');
+this.context.trigger('app:start', { root });
+```
+
 ##### Define a custom conditon
 
 The `InitializeLazy` action has a getter `condition` that returns a promise. It

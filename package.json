@@ -39,7 +39,7 @@
     "doctoc": "^2.0.1",
     "eslint": "^7.4.0",
     "eslint-plugin-jest": "^24.0.2",
-    "jest": "^26.0.1",
+    "jest": "^27.0.6",
     "live-server": "^1.2.1",
     "np": "^7.0.0",
     "rollup": "^2.3.3",

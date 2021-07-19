@@ -164,6 +164,10 @@ context.trigger('event:type', {foo: 'bar'}); // logs: 'I am an action', {context
 
 Read more about the [actions API](./docs/Context.md#actions).
 
+#### Build-in actions
+
+Pacto offers build-in actions that help to define modules by using a configuration.
+
 ##### Initialize
 
 The initialize action setups a module and wires a [view](#view) to a DOM element. Each
@@ -266,12 +270,33 @@ context.actions.add('app:start', [
 context.trigger('app:start');
 ```
 
-The InitializeLazy action has a getter `condition` that returns a promise. It
+##### Define a custom conditon
+
+The `InitializeLazy` action has a getter `condition` that returns a promise. It
 allows customizing the load condition when executing the startup (lookup for
 matching elements) process. The default implementation waits for the DOM-ready
 state to be "complete" (using the `DOMContentLoaded` event to wait for).
 
-##### Handling Errors
+```javascript
+export class Action extends InitializeLazy {
+	get settings() {
+		return {
+			selector: '.mymodule',
+		};
+	}
+
+	get import() {
+		return import('mymodule/actions/Initialize');
+	}
+
+	get condition() {
+		// Not a real world example...
+		return new Promise((resolve) => setTimeout(resolve, 1000));
+	}
+}
+```
+
+##### Handling errors
 
 Note that due to various reasons there could be an error during the
 execution of your actions. To be able to catch these you can listen

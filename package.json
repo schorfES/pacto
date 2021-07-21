@@ -14,7 +14,6 @@
   "scripts": {
     "validate": "make validate",
     "test": "snyk test && make tests",
-    "coverage": "make coverage",
     "docs": "make docs",
     "build": "make build",
     "prepare": "make build"
@@ -35,7 +34,6 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.2",
     "babel-plugin-dynamic-import-node": "^2.3.0",
-    "codecov": "^3.6.5",
     "doctoc": "^2.0.1",
     "eslint": "^7.4.0",
     "eslint-plugin-jest": "^24.0.2",

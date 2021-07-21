@@ -1,4 +1,4 @@
-.PHONY:  docs audit validate tests coverage build release
+.PHONY:  docs audit validate tests build release
 
 
 docs:
@@ -26,10 +26,6 @@ tests:
 		src \
 		--coverage \
 		--verbose
-
-
-coverage:
-	node_modules/.bin/codecov
 
 
 build:

@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "validate": "make validate",
-    "test": "snyk test && make tests",
+    "test": "make tests",
     "docs": "make docs",
     "build": "make build",
     "prepare": "make build"
@@ -42,7 +42,6 @@
     "rollup": "^2.3.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^7.0.0",
-    "setimmediate": "^1.0.5",
-    "snyk": "^1.305.0"
+    "setimmediate": "^1.0.5"
   }
 }

@@ -9,7 +9,7 @@ tests/
 .eslintignore
 .eslintrc
 .nvmrc
-.travis.yml
+.snyk
 babel.config.js
 jest.config.js
 rollup.config.js

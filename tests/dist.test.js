@@ -12,7 +12,7 @@ const CLASSES = [
 
 describe('The dist builds', () => {
 
-	test('ems build exposes all pacto classes', () => {
+	test('esm build exposes all pacto classes', () => {
 		expect(Object.keys(esm)).toEqual(CLASSES);
 	});
 

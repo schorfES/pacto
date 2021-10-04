@@ -1,17 +1,9 @@
-.PHONY:  docs audit validate tests build release
+.PHONY:  docs validate tests build release
 
 
 docs:
 	node_modules/.bin/doctoc \
 		./README.md
-
-
-audit:
-	# ignoring 1700 doctoc>...>trim (https://github.com/thlorenz/doctoc/pull/202)
-	node_modules/.bin/audit-ci  \
-		--moderate \
-		--allowlist 1700 \
-		--allowlist 1751
 
 
 validate:

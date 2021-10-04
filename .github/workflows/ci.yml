@@ -45,6 +45,3 @@ jobs:
 
       - name: Run validations
         run: make validate
-
-      - name: Run audits
-        run: make audit

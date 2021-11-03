@@ -35,7 +35,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "doctoc": "^2.0.1",
     "eslint": "^7.4.0",
-    "eslint-plugin-jest": "^24.0.2",
+    "eslint-plugin-jest": "^25.2.2",
     "jest": "^27.0.6",
     "np": "^7.0.0",
     "rollup": "^2.3.3",

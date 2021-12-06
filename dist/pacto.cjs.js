@@ -33,7 +33,9 @@ class EventEmitter {
     return this;
   }
 
-  trigger(type, data = null) {
+  trigger(type) {
+    let data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
     const refs = __refs$1.get(this);
 
     refs[type] && refs[type].forEach(callback => callback.call(null, {
@@ -166,7 +168,8 @@ class __Actions extends __Resolver {
 }
 
 class Context extends EventEmitter {
-  constructor(options = null) {
+  constructor() {
+    let options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     super();
     const refs = {
       actions: new __Actions(this),
@@ -195,7 +198,8 @@ class Context extends EventEmitter {
     return __refs.get(this).history || null;
   }
 
-  trigger(type, data = null) {
+  trigger(type) {
+    let data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     const {
       history
     } = this;

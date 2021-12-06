@@ -1,6 +1,6 @@
 # Pacto
 
-[![Build Status](https://travis-ci.org/schorfES/pacto.svg?branch=main)](https://travis-ci.org/schorfES/pacto)
+[![CI Status](https://github.com/schorfES/pacto/actions/workflows/ci.yml/badge.svg)](https://github.com/schorfES/pacto/actions)
 [![Coverage Status on Codecov](https://codecov.io/gh/schorfES/pacto/branch/main/graph/badge.svg)](https://codecov.io/gh/schorfES/pacto)
 [![Known Vulnerabilities](https://snyk.io/test/github/schorfES/pacto/badge.svg)](https://snyk.io/test/github/schorfES/pacto)
 [![Minified gzipped size](https://badgen.net/bundlephobia/minzip/pacto)](https://bundlephobia.com/result?p=pacto)

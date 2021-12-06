@@ -1,7 +1,7 @@
 # Pacto
 
-[![Build Status](https://travis-ci.org/schorfES/pacto.svg?branch=master)](https://travis-ci.org/schorfES/pacto)
-[![Coverage Status on Codecov](https://codecov.io/gh/schorfES/pacto/branch/master/graph/badge.svg)](https://codecov.io/gh/schorfES/pacto)
+[![Build Status](https://travis-ci.org/schorfES/pacto.svg?branch=main)](https://travis-ci.org/schorfES/pacto)
+[![Coverage Status on Codecov](https://codecov.io/gh/schorfES/pacto/branch/main/graph/badge.svg)](https://codecov.io/gh/schorfES/pacto)
 [![Known Vulnerabilities](https://snyk.io/test/github/schorfES/pacto/badge.svg)](https://snyk.io/test/github/schorfES/pacto)
 [![Minified gzipped size](https://badgen.net/bundlephobia/minzip/pacto)](https://bundlephobia.com/result?p=pacto)
 
@@ -61,7 +61,7 @@ These actions allow creating modules. Each module should contain at least one
 stores, states, services, views etc. This initialize action is meant to be
 the entry point of each module. It setups and executes its module:
 
-![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/master/docs/app.png)
+![pacto app module structure](https://raw.githubusercontent.com/schorfES/pacto/main/docs/app.png)
 
 The state management is not solved by pacto, but there is small _backbone/mobx inspired_
 model and collection extension for pacto called [pacto.model](https://github.com/schorfES/pacto.model).
@@ -229,7 +229,7 @@ elements is found and visible, the initialize action of that module will be
 imported, instantiated and executed. Once loaded the specific action will
 replace the lazy action.
 
-![pacto app module structure with lazy initialize action](https://raw.githubusercontent.com/schorfES/pacto/master/docs/appchunk.png)
+![pacto app module structure with lazy initialize action](https://raw.githubusercontent.com/schorfES/pacto/main/docs/appchunk.png)
 
 ```javascript
 // Initialize.js

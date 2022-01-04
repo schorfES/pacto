@@ -24,7 +24,6 @@
   },
   "author": "Norman Rusch",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/eslint-parser": "^7.16.3",
@@ -33,6 +32,7 @@
     "@babel/preset-env": "^7.9.0",
     "babel-jest": "^27.0.2",
     "babel-plugin-dynamic-import-node": "^2.3.0",
+    "browserslist": "^4.19.1",
     "doctoc": "^2.0.1",
     "eslint": "^8.4.0",
     "eslint-plugin-jest": "^25.2.2",

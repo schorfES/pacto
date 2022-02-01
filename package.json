@@ -35,7 +35,7 @@
     "browserslist": "^4.19.1",
     "doctoc": "^2.0.1",
     "eslint": "^8.4.0",
-    "eslint-plugin-jest": "^25.2.2",
+    "eslint-plugin-jest": "^26.0.0",
     "jest": "^27.0.6",
     "np": "^7.0.0",
     "rollup": "^2.3.3",

@@ -34,7 +34,7 @@
     "babel-plugin-dynamic-import-node": "^2.3.0",
     "browserslist": "^4.19.1",
     "doctoc": "^2.0.1",
-    "eslint": "^8.4.0",
+    "eslint": "^9.28.0",
     "eslint-plugin-jest": "^28.3.0",
     "jest": "^29.0.1",
     "jest-environment-jsdom": "^29.1.2",
